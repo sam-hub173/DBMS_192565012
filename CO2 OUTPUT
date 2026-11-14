@@ -1,0 +1,1085 @@
+CO2 AT1  
+
+mysql> -- ============================================ 
+
+Query OK, 0 rows affected (0.006 sec) 
+
+ 
+
+mysql> -- CSA05 DBMS ASSIGNMENT - CO2 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> -- COURIER HANDOVER COMPLETION 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- COMPLETE SQL SCRIPT 
+
+Query OK, 0 rows affected (0.005 sec) 
+
+ 
+
+mysql> -- ============================================ 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> -- TASK 1: DATABASE CREATION 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE DATABASE IF NOT EXISTS CourierDB; 
+
+Query OK, 1 row affected (0.532 sec) 
+
+ 
+
+mysql> USE CourierDB; 
+
+Database changed 
+
+mysql> 
+
+mysql> 
+
+mysql> -- TASK 1: CREATE SENDER TABLE 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE IF NOT EXISTS Sender ( 
+
+    ->     SenderID INT PRIMARY KEY, 
+
+    ->     SenderName VARCHAR(100) NOT NULL, 
+
+    ->     RouteGroup VARCHAR(50) NOT NULL 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.371 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- CREATE SERVICE CATALOG TABLE 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE IF NOT EXISTS ServiceCatalog ( 
+
+    ->     ServiceID INT PRIMARY KEY, 
+
+    ->     ServiceCode VARCHAR(20) UNIQUE NOT NULL, 
+
+    ->     ServiceName VARCHAR(100) NOT NULL, 
+
+    ->     VolumeWeight DECIMAL(10,2) CHECK (VolumeWeight > 0) 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.437 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- CREATE COORDINATOR TABLE 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE IF NOT EXISTS Coordinator ( 
+
+    ->     CoordinatorID INT PRIMARY KEY, 
+
+    ->     CoordinatorName VARCHAR(100) NOT NULL, 
+
+    ->     Hub VARCHAR(50) NOT NULL 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.291 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- CREATE ASSIGNMENT TABLE 
+
+Query OK, 0 rows affected (0.005 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE IF NOT EXISTS Assignment ( 
+
+    ->     SenderID INT, 
+
+    ->     ServiceID INT, 
+
+    ->     CoordinatorID INT NOT NULL, 
+
+    ->     PRIMARY KEY (SenderID, ServiceID), 
+
+    ->     FOREIGN KEY (SenderID) 
+
+    ->         REFERENCES Sender(SenderID) ON DELETE RESTRICT, 
+
+    ->     FOREIGN KEY (ServiceID) 
+
+    ->         REFERENCES ServiceCatalog(ServiceID) ON DELETE RESTRICT, 
+
+    ->     FOREIGN KEY (CoordinatorID) 
+
+    ->         REFERENCES Coordinator(CoordinatorID) ON DELETE RESTRICT 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.502 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- CREATE POLICY BAND TABLE 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE IF NOT EXISTS PolicyBand ( 
+
+    ->     Completion INT PRIMARY KEY CHECK (Completion BETWEEN 0 AND 100), 
+
+    ->     ServiceBand VARCHAR(20) NOT NULL 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.318 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- CREATE POLICY FACTOR TABLE 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE IF NOT EXISTS PolicyFactor ( 
+
+    ->     ServiceBand VARCHAR(20) PRIMARY KEY, 
+
+    ->     RouteFactor DECIMAL(5,2) NOT NULL 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.291 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- CREATE OBSERVATION TABLE 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE IF NOT EXISTS Observation ( 
+
+    ->     SenderID INT, 
+
+    ->     ServiceID INT, 
+
+    ->     DispatchWave INT, 
+
+    ->     Completion INT NOT NULL, 
+
+    ->     PRIMARY KEY (SenderID, ServiceID, DispatchWave), 
+
+    ->     FOREIGN KEY (SenderID, ServiceID) 
+
+    ->         REFERENCES Assignment(SenderID, ServiceID) 
+
+    ->         ON DELETE CASCADE, 
+
+    ->     FOREIGN KEY (Completion) 
+
+    ->         REFERENCES PolicyBand(Completion) 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.488 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ============================================ 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> -- TASK 7: RELATIONAL ALGEBRA SQL QUERIES 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- ============================================ 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- Q1: LIST SENDER 1 OBSERVATIONS FOR WAVE 4 
+
+Query OK, 0 rows affected (0.005 sec) 
+
+ 
+
+mysql> -- AND CALCULATE WEIGHTED INDEX 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT 
+
+    ->     O.SenderID, 
+
+    ->     O.ServiceID, 
+
+    ->     O.DispatchWave, 
+
+    ->     O.Completion, 
+
+    ->     P.ServiceBand, 
+
+    ->     F.RouteFactor, 
+
+    ->     O.Completion * F.RouteFactor AS WeightedIndex 
+
+    -> FROM Observation O 
+
+    -> JOIN PolicyBand P 
+
+    ->     ON O.Completion = P.Completion 
+
+    -> JOIN PolicyFactor F 
+
+    ->     ON P.ServiceBand = F.ServiceBand 
+
+    -> WHERE O.SenderID = 1 
+
+    -> AND O.DispatchWave = 4; 
+
+Empty set (0.064 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- Q2: FIND SENDERS MEETING COMPLETION 
+
+Query OK, 0 rows affected (0.005 sec) 
+
+ 
+
+mysql> -- THRESHOLD OF 39 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT S.* 
+
+    -> FROM Sender S 
+
+    -> WHERE NOT EXISTS ( 
+
+    ->     SELECT 1 
+
+    ->     FROM Observation O 
+
+    ->     WHERE O.SenderID = S.SenderID 
+
+    ->     AND O.Completion < 39 
+
+    -> ); 
+
+Empty set (0.049 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- Q3: FIND SERVICES WITH NO VALUE BELOW 39 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- IN DISPATCH WAVE 4 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT DISTINCT O.ServiceID 
+
+    -> FROM Observation O 
+
+    -> WHERE O.DispatchWave = 4 
+
+    -> AND NOT EXISTS ( 
+
+    ->     SELECT 1 
+
+    ->     FROM Observation O2 
+
+    ->     WHERE O2.ServiceID = O.ServiceID 
+
+    ->     AND O2.DispatchWave = 4 
+
+    ->     AND O2.Completion < 39 
+
+    -> ); 
+
+Empty set (0.027 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- Q4: FIND COORDINATORS WHOSE AVERAGE 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> -- IS BELOW THEIR HUB AVERAGE 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> WITH CoordinatorAverage AS ( 
+
+    ->     SELECT 
+
+    ->         C.CoordinatorID, 
+
+    ->         C.CoordinatorName, 
+
+    ->         C.Hub, 
+
+    ->         AVG(O.Completion) AS AvgCompletion 
+
+    ->     FROM Coordinator C 
+
+    ->     JOIN Assignment A 
+
+    ->         ON C.CoordinatorID = A.CoordinatorID 
+
+    ->     JOIN Observation O 
+
+    ->         ON A.SenderID = O.SenderID 
+
+    ->         AND A.ServiceID = O.ServiceID 
+
+    ->     GROUP BY 
+
+    ->         C.CoordinatorID, 
+
+    ->         C.CoordinatorName, 
+
+    ->         C.Hub 
+
+    -> ), 
+
+    -> HubAverage AS ( 
+
+    ->     SELECT 
+
+    ->         C.Hub, 
+
+    ->         AVG(O.Completion) AS HubAvgCompletion 
+
+    ->     FROM Coordinator C 
+
+    ->     JOIN Assignment A 
+
+    ->         ON C.CoordinatorID = A.CoordinatorID 
+
+    ->     JOIN Observation O 
+
+    ->         ON A.SenderID = O.SenderID 
+
+    ->         AND A.ServiceID = O.ServiceID 
+
+    ->     GROUP BY C.Hub 
+
+    -> ) 
+
+    -> SELECT 
+
+    ->     CA.CoordinatorID, 
+
+    ->     CA.CoordinatorName, 
+
+    ->     CA.Hub, 
+
+    ->     CA.AvgCompletion, 
+
+    ->     HA.HubAvgCompletion 
+
+    -> FROM CoordinatorAverage CA 
+
+    -> JOIN HubAverage HA 
+
+    ->     ON CA.Hub = HA.Hub 
+
+    -> WHERE CA.AvgCompletion < HA.HubAvgCompletion; 
+
+Empty set (0.055 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- Q5: FIND SENDERS WITH BELOW-THRESHOLD 
+
+Query OK, 0 rows affected (0.005 sec) 
+
+ 
+
+mysql> -- OBSERVATIONS IN AT LEAST 3 DISTINCT WAVES 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT 
+
+    ->     SenderID, 
+
+    ->     COUNT(DISTINCT DispatchWave) AS TotalWaves 
+
+    -> FROM Observation 
+
+    -> WHERE Completion < 39 
+
+    -> GROUP BY SenderID 
+
+    -> HAVING COUNT(DISTINCT DispatchWave) >= 3; 
+
+Empty set (0.028 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ============================================ 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- TASK 12: READ PROJECTION TABLE 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- ============================================ 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- CREATE READ PROJECTION TABLE 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE IF NOT EXISTS mv_SenderTrackingCard ( 
+
+    ->     SenderID INT, 
+
+    ->     ServiceID INT, 
+
+    ->     DispatchWave INT, 
+
+    ->     SenderName VARCHAR(100), 
+
+    ->     ServiceName VARCHAR(100), 
+
+    ->     Completion INT, 
+
+    ->     ServiceBand VARCHAR(20), 
+
+    ->     RouteFactor DECIMAL(5,2), 
+
+    ->     PRIMARY KEY (SenderID, ServiceID, DispatchWave) 
+
+    -> ) ENGINE=InnoDB; 
+
+Query OK, 0 rows affected (0.439 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- CREATE INDEX 
+
+Query OK, 0 rows affected (0.006 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE INDEX IF NOT EXISTS idx_sender_lookup 
+
+    -> ON mv_SenderTrackingCard(SenderID); 
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'IF NOT EXISTS idx_sender_lookup 
+
+ON mv_SenderTrackingCard(SenderID)' at line 1 
+
+mysql> 
+
+mysql> 
+
+mysql> -- INSERT DATA INTO READ PROJECTION TABLE 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> 
+
+mysql> INSERT INTO mv_SenderTrackingCard ( 
+
+    ->     SenderID, 
+
+    ->     ServiceID, 
+
+    ->     DispatchWave, 
+
+    ->     SenderName, 
+
+    ->     ServiceName, 
+
+    ->     Completion, 
+
+    ->     ServiceBand, 
+
+    ->     RouteFactor 
+
+    -> ) 
+
+    -> SELECT 
+
+    ->     O.SenderID, 
+
+    ->     O.ServiceID, 
+
+    ->     O.DispatchWave, 
+
+    ->     S.SenderName, 
+
+    ->     SC.ServiceName, 
+
+    ->     O.Completion, 
+
+    ->     PB.ServiceBand, 
+
+    ->     PF.RouteFactor 
+
+    -> FROM Observation O 
+
+    -> JOIN Sender S 
+
+    ->     ON O.SenderID = S.SenderID 
+
+    -> JOIN ServiceCatalog SC 
+
+    ->     ON O.ServiceID = SC.ServiceID 
+
+    -> JOIN PolicyBand PB 
+
+    ->     ON O.Completion = PB.Completion 
+
+    -> JOIN PolicyFactor PF 
+
+    ->     ON PB.ServiceBand = PF.ServiceBand 
+
+    -> ON DUPLICATE KEY UPDATE 
+
+    ->     SenderName = VALUES(SenderName), 
+
+    ->     ServiceName = VALUES(ServiceName), 
+
+    ->     Completion = VALUES(Completion), 
+
+    ->     ServiceBand = VALUES(ServiceBand), 
+
+    ->     RouteFactor = VALUES(RouteFactor); 
+
+Query OK, 0 rows affected, 5 warnings (0.076 sec) 
+
+Records: 0  Duplicates: 0  Warnings: 5 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- RETRIEVE SENDER TRACKING DETAILS 
+
+Query OK, 0 rows affected (0.005 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT * 
+
+    -> FROM mv_SenderTrackingCard 
+
+    -> WHERE SenderID = 1; 
+
+Empty set (0.007 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ============================================ 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> -- FINAL VERIFICATION QUERIES 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> -- ============================================ 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- DISPLAY ALL TABLES 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> SHOW TABLES; 
+
++-----------------------+ 
+
+| Tables_in_courierdb   | 
+
++-----------------------+ 
+
+| assignment            | 
+
+| coordinator           | 
+
+| mv_sendertrackingcard | 
+
+| observation           | 
+
+| policyband            | 
+
+| policyfactor          | 
+
+| sender                | 
+
+| servicecatalog        | 
+
++-----------------------+ 
+
+8 rows in set (0.112 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- DISPLAY TABLE STRUCTURES 
+
+Query OK, 0 rows affected (0.005 sec) 
+
+ 
+
+mysql> 
+
+mysql> DESC Sender; 
+
++------------+--------------+------+-----+---------+-------+ 
+
+| Field      | Type         | Null | Key | Default | Extra | 
+
++------------+--------------+------+-----+---------+-------+ 
+
+| SenderID   | int          | NO   | PRI | NULL    |       | 
+
+| SenderName | varchar(100) | NO   |     | NULL    |       | 
+
+| RouteGroup | varchar(50)  | NO   |     | NULL    |       | 
+
++------------+--------------+------+-----+---------+-------+ 
+
+3 rows in set (0.114 sec) 
+
+ 
+
+mysql> DESC ServiceCatalog; 
+
++--------------+---------------+------+-----+---------+-------+ 
+
+| Field        | Type          | Null | Key | Default | Extra | 
+
++--------------+---------------+------+-----+---------+-------+ 
+
+| ServiceID    | int           | NO   | PRI | NULL    |       | 
+
+| ServiceCode  | varchar(20)   | NO   | UNI | NULL    |       | 
+
+| ServiceName  | varchar(100)  | NO   |     | NULL    |       | 
+
+| VolumeWeight | decimal(10,2) | YES  |     | NULL    |       | 
+
++--------------+---------------+------+-----+---------+-------+ 
+
+4 rows in set (0.022 sec) 
+
+ 
+
+mysql> DESC Coordinator; 
+
++-----------------+--------------+------+-----+---------+-------+ 
+
+| Field           | Type         | Null | Key | Default | Extra | 
+
++-----------------+--------------+------+-----+---------+-------+ 
+
+| CoordinatorID   | int          | NO   | PRI | NULL    |       | 
+
+| CoordinatorName | varchar(100) | NO   |     | NULL    |       | 
+
+| Hub             | varchar(50)  | NO   |     | NULL    |       | 
+
++-----------------+--------------+------+-----+---------+-------+ 
+
+3 rows in set (0.028 sec) 
+
+ 
+
+mysql> DESC Assignment; 
+
++---------------+------+------+-----+---------+-------+ 
+
+| Field         | Type | Null | Key | Default | Extra | 
+
++---------------+------+------+-----+---------+-------+ 
+
+| SenderID      | int  | NO   | PRI | NULL    |       | 
+
+| ServiceID     | int  | NO   | PRI | NULL    |       | 
+
+| CoordinatorID | int  | NO   | MUL | NULL    |       | 
+
++---------------+------+------+-----+---------+-------+ 
+
+3 rows in set (0.024 sec) 
+
+ 
+
+mysql> DESC PolicyBand; 
+
++-------------+-------------+------+-----+---------+-------+ 
+
+| Field       | Type        | Null | Key | Default | Extra | 
+
++-------------+-------------+------+-----+---------+-------+ 
+
+| Completion  | int         | NO   | PRI | NULL    |       | 
+
+| ServiceBand | varchar(20) | NO   |     | NULL    |       | 
+
++-------------+-------------+------+-----+---------+-------+ 
+
+2 rows in set (0.021 sec) 
+
+ 
+
+mysql> DESC PolicyFactor; 
+
++-------------+--------------+------+-----+---------+-------+ 
+
+| Field       | Type         | Null | Key | Default | Extra | 
+
++-------------+--------------+------+-----+---------+-------+ 
+
+| ServiceBand | varchar(20)  | NO   | PRI | NULL    |       | 
+
+| RouteFactor | decimal(5,2) | NO   |     | NULL    |       | 
+
++-------------+--------------+------+-----+---------+-------+ 
+
+2 rows in set (0.018 sec) 
+
+ 
+
+mysql> DESC Observation; 
+
++--------------+------+------+-----+---------+-------+ 
+
+| Field        | Type | Null | Key | Default | Extra | 
+
++--------------+------+------+-----+---------+-------+ 
+
+| SenderID     | int  | NO   | PRI | NULL    |       | 
+
+| ServiceID    | int  | NO   | PRI | NULL    |       | 
+
+| DispatchWave | int  | NO   | PRI | NULL    |       | 
+
+| Completion   | int  | NO   | MUL | NULL    |       | 
+
++--------------+------+------+-----+---------+-------+ 
+
+4 rows in set (0.018 sec) 
+
+ 
+
+mysql> DESC mv_SenderTrackingCard; 
+
++--------------+--------------+------+-----+---------+-------+ 
+
+| Field        | Type         | Null | Key | Default | Extra | 
+
++--------------+--------------+------+-----+---------+-------+ 
+
+| SenderID     | int          | NO   | PRI | NULL    |       | 
+
+| ServiceID    | int          | NO   | PRI | NULL    |       | 
+
+| DispatchWave | int          | NO   | PRI | NULL    |       | 
+
+| SenderName   | varchar(100) | YES  |     | NULL    |       | 
+
+| ServiceName  | varchar(100) | YES  |     | NULL    |       | 
+
+| Completion   | int          | YES  |     | NULL    |       | 
+
+| ServiceBand  | varchar(20)  | YES  |     | NULL    |       | 
+
+| RouteFactor  | decimal(5,2) | YES  |     | NULL    |       | 
+
++--------------+--------------+------+-----+---------+-------+ 
+
+8 rows in set (0.016 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- DISPLAY ALL RECORDS 
+
+Query OK, 0 rows affected (0.005 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT * FROM Sender; 
+
+Empty set (0.005 sec) 
+
+ 
+
+mysql> SELECT * FROM ServiceCatalog; 
+
+Empty set (0.005 sec) 
+
+ 
+
+mysql> SELECT * FROM Coordinator; 
+
+Empty set (0.004 sec) 
+
+ 
+
+mysql> SELECT * FROM Assignment; 
+
+Empty set (0.004 sec) 
+
+ 
+
+mysql> SELECT * FROM PolicyBand; 
+
+Empty set (0.005 sec) 
+
+ 
+
+mysql> SELECT * FROM PolicyFactor; 
+
+Empty set (0.007 sec) 
+
+ 
+
+mysql> SELECT * FROM Observation; 
+
+Empty set (0.005 sec) 
+
+ 
+
+mysql> SELECT * FROM mv_SenderTrackingCard; 
+
+Empty set (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- COUNT TOTAL OBSERVATIONS 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT COUNT(*) AS TotalObservations 
+
+    -> FROM Observation; 
+
++-------------------+ 
+
+| TotalObservations | 
+
++-------------------+ 
+
+|                 0 | 
+
++-------------------+ 
+
+1 row in set (0.033 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- END OF ASSIGNMENT 
+
+Query OK, 0 rows affected (0.005 sec) 
+
+ 
+
+mysql> 
