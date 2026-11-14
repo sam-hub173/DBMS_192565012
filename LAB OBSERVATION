@@ -1,0 +1,1285 @@
+mysql> -- Create a new database
+Query OK, 0 rows affected (0.007 sec)
+
+mysql> CREATE DATABASE CompanyDB;
+Query OK, 1 row affected (0.136 sec)
+
+mysql>
+mysql> -- Switch to using the new database (Required in MySQL, SQL Server, etc.)
+Query OK, 0 rows affected (0.006 sec)
+
+mysql> USE CompanyDB;
+Database changed
+mysql> CREATE TABLE Staff (
+    ->     StaffID INT PRIMARY KEY,
+    ->     StaffName VARCHAR(50),
+    ->     Department VARCHAR(50),
+    ->     Salary DECIMAL(10, 2)
+    -> );
+Query OK, 0 rows affected (0.728 sec)
+
+mysql> INSERT INTO Staff (StaffID, StaffName, Department, Salary) VALUES
+    -> (1, 'Alice Smith', 'IT', 75000.00),
+    -> (2, 'Bob Jones', 'HR', 60000.00),
+    -> (3, 'Charlie Brown', 'IT', 82000.00),
+    -> (4, 'Diana Prince', 'Finance', 95000.00),
+    -> (5, 'Evan Wright', 'HR', 55000.00),
+    -> (6, 'Fiona Glen', 'Marketing', 68000.00);
+Query OK, 6 rows affected (0.231 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM Staff;
++---------+---------------+------------+----------+
+| StaffID | StaffName     | Department | Salary   |
++---------+---------------+------------+----------+
+|       1 | Alice Smith   | IT         | 75000.00 |
+|       2 | Bob Jones     | HR         | 60000.00 |
+|       3 | Charlie Brown | IT         | 82000.00 |
+|       4 | Diana Prince  | Finance    | 95000.00 |
+|       5 | Evan Wright   | HR         | 55000.00 |
+|       6 | Fiona Glen    | Marketing  | 68000.00 |
++---------+---------------+------------+----------+
+6 rows in set (0.010 sec)
+
+mysql> -- 1. Add a new column 'Email' to the Staff table
+Query OK, 0 rows affected (0.005 sec)
+
+mysql> ALTER TABLE Staff ADD Email VARCHAR(100);
+Query OK, 0 rows affected (1.818 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql> -- 2. Modify column size/type
+Query OK, 0 rows affected (0.004 sec)
+
+mysql> ALTER TABLE Staff MODIFY StaffName VARCHAR(100);
+Query OK, 6 rows affected (0.516 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql> -- 3. Remove a column
+Query OK, 0 rows affected (0.005 sec)
+
+mysql> ALTER TABLE Staff DROP COLUMN Email;
+Query OK, 0 rows affected (0.151 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql> -- 4. Create a temporary table and drop it
+Query OK, 0 rows affected (0.005 sec)
+
+mysql> CREATE TABLE TempTable (ID INT);
+Query OK, 0 rows affected (0.227 sec)
+
+mysql> DROP TABLE TempTable;
+Query OK, 0 rows affected (0.564 sec)
+
+mysql> SELECT * FROM Staff;
++---------+---------------+------------+----------+
+| StaffID | StaffName     | Department | Salary   |
++---------+---------------+------------+----------+
+|       1 | Alice Smith   | IT         | 75000.00 |
+|       2 | Bob Jones     | HR         | 60000.00 |
+|       3 | Charlie Brown | IT         | 82000.00 |
+|       4 | Diana Prince  | Finance    | 95000.00 |
+|       5 | Evan Wright   | HR         | 55000.00 |
+|       6 | Fiona Glen    | Marketing  | 68000.00 |
++---------+---------------+------------+----------+
+6 rows in set (0.009 sec)
+
+mysql> -- 1. Insert a new record
+Query OK, 0 rows affected (0.008 sec)
+
+mysql> INSERT INTO Staff (StaffID, StaffName, Department, Salary)
+    -> VALUES (7, 'George Clark', 'IT', 72000.00);
+Query OK, 1 row affected (0.450 sec)
+
+mysql>
+mysql> -- 2. Update salary of a staff member
+Query OK, 0 rows affected (0.005 sec)
+
+mysql> UPDATE Staff
+    -> SET Salary = 78000.00
+    -> WHERE StaffID = 1;
+Query OK, 1 row affected (0.057 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>
+mysql> -- 3. Delete a specific record
+Query OK, 0 rows affected (0.004 sec)
+
+mysql> DELETE FROM Staff WHERE StaffID = 7;
+Query OK, 1 row affected (0.040 sec)
+
+mysql>
+mysql> -- 4. Display all data
+Query OK, 0 rows affected (0.006 sec)
+
+mysql> SELECT * FROM Staff;
++---------+---------------+------------+----------+
+| StaffID | StaffName     | Department | Salary   |
++---------+---------------+------------+----------+
+|       1 | Alice Smith   | IT         | 78000.00 |
+|       2 | Bob Jones     | HR         | 60000.00 |
+|       3 | Charlie Brown | IT         | 82000.00 |
+|       4 | Diana Prince  | Finance    | 95000.00 |
+|       5 | Evan Wright   | HR         | 55000.00 |
+|       6 | Fiona Glen    | Marketing  | 68000.00 |
++---------+---------------+------------+----------+
+6 rows in set (0.009 sec)
+
+mysql> -- 1. Insert a new record
+Query OK, 0 rows affected (0.007 sec)
+
+mysql> INSERT INTO Staff (StaffID, StaffName, Department, Salary)
+    -> VALUES (7, 'George Clark', 'IT', 72000.00);
+Query OK, 1 row affected (0.150 sec)
+
+mysql>
+mysql> -- 2. Update salary of a staff member
+Query OK, 0 rows affected (0.005 sec)
+
+mysql> UPDATE Staff
+    -> SET Salary = 78000.00
+    -> WHERE StaffID = 1;
+Query OK, 0 rows affected (0.006 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql>
+mysql> -- 3. Delete a specific record
+Query OK, 0 rows affected (0.003 sec)
+
+mysql> DELETE FROM Staff WHERE StaffID = 7;
+Query OK, 1 row affected (0.035 sec)
+
+mysql>
+mysql> -- 4. Display all data
+Query OK, 0 rows affected (0.004 sec)
+
+mysql> SELECT * FROM Staff;
++---------+---------------+------------+----------+
+| StaffID | StaffName     | Department | Salary   |
++---------+---------------+------------+----------+
+|       1 | Alice Smith   | IT         | 78000.00 |
+|       2 | Bob Jones     | HR         | 60000.00 |
+|       3 | Charlie Brown | IT         | 82000.00 |
+|       4 | Diana Prince  | Finance    | 95000.00 |
+|       5 | Evan Wright   | HR         | 55000.00 |
+|       6 | Fiona Glen    | Marketing  | 68000.00 |
++---------+---------------+------------+----------+
+6 rows in set (0.009 sec)
+
+mysql> -- 1. Filter using WHERE and BETWEEN
+Query OK, 0 rows affected (0.015 sec)
+
+mysql> SELECT StaffName, Salary FROM Staff
+    -> WHERE Salary BETWEEN 60000.00 AND 85000.00;
++---------------+----------+
+| StaffName     | Salary   |
++---------------+----------+
+| Alice Smith   | 78000.00 |
+| Bob Jones     | 60000.00 |
+| Charlie Brown | 82000.00 |
+| Fiona Glen    | 68000.00 |
++---------------+----------+
+4 rows in set (0.401 sec)
+
+mysql>
+mysql> -- 2. Filter using IN operator
+Query OK, 0 rows affected (0.007 sec)
+
+mysql> SELECT * FROM Staff
+    -> WHERE Department IN ('IT', 'Finance');
++---------+---------------+------------+----------+
+| StaffID | StaffName     | Department | Salary   |
++---------+---------------+------------+----------+
+|       1 | Alice Smith   | IT         | 78000.00 |
+|       3 | Charlie Brown | IT         | 82000.00 |
+|       4 | Diana Prince  | Finance    | 95000.00 |
++---------+---------------+------------+----------+
+3 rows in set (0.028 sec)
+
+mysql>
+mysql> -- 3. Pattern Matching with LIKE (Names starting with 'A')
+Query OK, 0 rows affected (0.006 sec)
+
+mysql> SELECT * FROM Staff
+    -> WHERE StaffName LIKE 'A%';
++---------+-------------+------------+----------+
+| StaffID | StaffName   | Department | Salary   |
++---------+-------------+------------+----------+
+|       1 | Alice Smith | IT         | 78000.00 |
++---------+-------------+------------+----------+
+1 row in set (0.008 sec)
+
+mysql>
+mysql> -- 4. Sorting results in descending order
+Query OK, 0 rows affected (0.005 sec)
+
+mysql> SELECT * FROM Staff
+    -> ORDER BY Salary DESC;
++---------+---------------+------------+----------+
+| StaffID | StaffName     | Department | Salary   |
++---------+---------------+------------+----------+
+|       4 | Diana Prince  | Finance    | 95000.00 |
+|       3 | Charlie Brown | IT         | 82000.00 |
+|       1 | Alice Smith   | IT         | 78000.00 |
+|       6 | Fiona Glen    | Marketing  | 68000.00 |
+|       2 | Bob Jones     | HR         | 60000.00 |
+|       5 | Evan Wright   | HR         | 55000.00 |
++---------+---------------+------------+----------+
+6 rows in set (0.010 sec)
+
+mysql> -- 1. Find count, average salary, max salary per department
+Query OK, 0 rows affected (0.005 sec)
+
+mysql> SELECT Department,
+    ->        COUNT(*) AS TotalStaff,
+    ->        AVG(Salary) AS AvgSalary,
+    ->        MAX(Salary) AS MaxSalary
+    -> FROM Staff
+    -> GROUP BY Department;
++------------+------------+--------------+-----------+
+| Department | TotalStaff | AvgSalary    | MaxSalary |
++------------+------------+--------------+-----------+
+| IT         |          2 | 80000.000000 |  82000.00 |
+| HR         |          2 | 57500.000000 |  60000.00 |
+| Finance    |          1 | 95000.000000 |  95000.00 |
+| Marketing  |          1 | 68000.000000 |  68000.00 |
++------------+------------+--------------+-----------+
+4 rows in set (0.075 sec)
+
+mysql>
+mysql> -- 2. Filter grouped results using HAVING clause
+Query OK, 0 rows affected (0.004 sec)
+
+mysql> SELECT Department, AVG(Salary) AS AvgSalary
+    -> FROM Staff
+    -> GROUP BY Department
+    -> HAVING AVG(Salary) > 65000.00;
++------------+--------------+
+| Department | AvgSalary    |
++------------+--------------+
+| IT         | 80000.000000 |
+| Finance    | 95000.000000 |
+| Marketing  | 68000.000000 |
++------------+--------------+
+3 rows in set (0.418 sec)
+
+mysql> -- Setup secondary table for Joins
+Query OK, 0 rows affected (0.007 sec)
+
+mysql> CREATE TABLE Department_Details (
+    ->     DeptName VARCHAR(50) PRIMARY KEY,
+    ->     Location VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.622 sec)
+
+mysql>
+mysql> INSERT INTO Department_Details VALUES
+    -> ('IT', 'New York'),
+    -> ('HR', 'San Francisco'),
+    -> ('Finance', 'Chicago'),
+    -> ('Sales', 'Dallas');
+Query OK, 4 rows affected (0.051 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql> -- 1. INNER JOIN: Combine matching rows
+Query OK, 0 rows affected (0.005 sec)
+
+mysql> SELECT S.StaffName, S.Department, D.Location
+    -> FROM Staff S
+    -> INNER JOIN Department_Details D ON S.Department = D.DeptName;
++---------------+------------+---------------+
+| StaffName     | Department | Location      |
++---------------+------------+---------------+
+| Alice Smith   | IT         | New York      |
+| Bob Jones     | HR         | San Francisco |
+| Charlie Brown | IT         | New York      |
+| Diana Prince  | Finance    | Chicago       |
+| Evan Wright   | HR         | San Francisco |
++---------------+------------+---------------+
+5 rows in set (0.010 sec)
+
+mysql>
+mysql> -- 2. LEFT JOIN: All staff and their location (if available)
+Query OK, 0 rows affected (0.005 sec)
+
+mysql> SELECT S.StaffName, S.Department, D.Location
+    -> FROM Staff S
+    -> LEFT JOIN Department_Details D ON S.Department = D.DeptName;
++---------------+------------+---------------+
+| StaffName     | Department | Location      |
++---------------+------------+---------------+
+| Alice Smith   | IT         | New York      |
+| Bob Jones     | HR         | San Francisco |
+| Charlie Brown | IT         | New York      |
+| Diana Prince  | Finance    | Chicago       |
+| Evan Wright   | HR         | San Francisco |
+| Fiona Glen    | Marketing  | NULL          |
++---------------+------------+---------------+
+6 rows in set (0.011 sec)
+
+mysql>
+mysql> -- 3. RIGHT JOIN: All locations including departments with no staff
+Query OK, 0 rows affected (0.005 sec)
+
+mysql> SELECT S.StaffName, D.DeptName, D.Location
+    -> FROM Staff S
+    -> RIGHT JOIN Department_Details D ON S.Department = D.DeptName;
++---------------+----------+---------------+
+| StaffName     | DeptName | Location      |
++---------------+----------+---------------+
+| Diana Prince  | Finance  | Chicago       |
+| Evan Wright   | HR       | San Francisco |
+| Bob Jones     | HR       | San Francisco |
+| Charlie Brown | IT       | New York      |
+| Alice Smith   | IT       | New York      |
+| NULL          | Sales    | Dallas        |
++---------------+----------+---------------+
+6 rows in set (0.009 sec)
+
+mysql>
+mysql> -- 4. CROSS JOIN: Cartesian Product
+Query OK, 0 rows affected (0.004 sec)
+
+mysql> SELECT S.StaffName, D.DeptName
+    -> FROM Staff S
+    -> CROSS JOIN Department_Details D;
++---------------+----------+
+| StaffName     | DeptName |
++---------------+----------+
+| Alice Smith   | Sales    |
+| Alice Smith   | IT       |
+| Alice Smith   | HR       |
+| Alice Smith   | Finance  |
+| Bob Jones     | Sales    |
+| Bob Jones     | IT       |
+| Bob Jones     | HR       |
+| Bob Jones     | Finance  |
+| Charlie Brown | Sales    |
+| Charlie Brown | IT       |
+| Charlie Brown | HR       |
+| Charlie Brown | Finance  |
+| Diana Prince  | Sales    |
+| Diana Prince  | IT       |
+| Diana Prince  | HR       |
+| Diana Prince  | Finance  |
+| Evan Wright   | Sales    |
+| Evan Wright   | IT       |
+| Evan Wright   | HR       |
+| Evan Wright   | Finance  |
+| Fiona Glen    | Sales    |
+| Fiona Glen    | IT       |
+| Fiona Glen    | HR       |
+| Fiona Glen    | Finance  |
++---------------+----------+
+24 rows in set (0.008 sec)
+
+mysql> -- 1. Single-row Subquery: Find staff earning more than company average
+Query OK, 0 rows affected (0.006 sec)
+
+mysql> SELECT StaffName, Salary
+    -> FROM Staff
+    -> WHERE Salary > (SELECT AVG(Salary) FROM Staff);
++---------------+----------+
+| StaffName     | Salary   |
++---------------+----------+
+| Alice Smith   | 78000.00 |
+| Charlie Brown | 82000.00 |
+| Diana Prince  | 95000.00 |
++---------------+----------+
+3 rows in set (0.061 sec)
+
+mysql>
+mysql> -- 2. Multi-row Subquery using IN: Staff in departments located in 'New York' or 'Chicago'
+Query OK, 0 rows affected (0.005 sec)
+
+mysql> SELECT StaffName, Department
+    -> FROM Staff
+    -> WHERE Department IN (
+    ->     SELECT DeptName FROM Department_Details WHERE Location IN ('New York', 'Chicago')
+    -> );
++---------------+------------+
+| StaffName     | Department |
++---------------+------------+
+| Alice Smith   | IT         |
+| Charlie Brown | IT         |
+| Diana Prince  | Finance    |
++---------------+------------+
+3 rows in set (0.013 sec)
+
+mysql> -- 1. Create a View for IT department staff only
+Query OK, 0 rows affected (0.008 sec)
+
+mysql> CREATE VIEW IT_Staff AS
+    -> SELECT StaffID, StaffName, Salary
+    -> FROM Staff
+    -> WHERE Department = 'IT';
+Query OK, 0 rows affected (0.105 sec)
+
+mysql>
+mysql> -- 2. Query the View
+Query OK, 0 rows affected (0.006 sec)
+
+mysql> SELECT * FROM IT_Staff;
++---------+---------------+----------+
+| StaffID | StaffName     | Salary   |
++---------+---------------+----------+
+|       1 | Alice Smith   | 78000.00 |
+|       3 | Charlie Brown | 82000.00 |
++---------+---------------+----------+
+2 rows in set (0.034 sec)
+
+mysql>
+mysql> -- 3. Drop the View
+Query OK, 0 rows affected (0.004 sec)
+
+mysql> DROP VIEW IT_Staff;
+Query OK, 0 rows affected (0.063 sec)
+
+mysql> -- Create a table demonstrating constraints
+Query OK, 0 rows affected (0.005 sec)
+
+mysql> CREATE TABLE Projects (
+    ->     ProjectID INT PRIMARY KEY,
+    ->     ProjectName VARCHAR(50) NOT NULL UNIQUE,
+    ->     Budget DECIMAL(10, 2) CHECK (Budget >= 5000.00),
+    ->     LeadID INT,
+    ->     FOREIGN KEY (LeadID) REFERENCES Staff(StaffID) ON DELETE SET NULL
+    -> );
+Query OK, 0 rows affected (0.781 sec)
+
+mysql>
+mysql> -- Insert valid data
+Query OK, 0 rows affected (0.003 sec)
+
+mysql> INSERT INTO Projects VALUES (101, 'Cloud Migration', 15000.00, 1);
+Query OK, 1 row affected (0.083 sec)
+
+mysql> SELECT * FROM Staff;
++---------+---------------+------------+----------+
+| StaffID | StaffName     | Department | Salary   |
++---------+---------------+------------+----------+
+|       1 | Alice Smith   | IT         | 78000.00 |
+|       2 | Bob Jones     | HR         | 60000.00 |
+|       3 | Charlie Brown | IT         | 82000.00 |
+|       4 | Diana Prince  | Finance    | 95000.00 |
+|       5 | Evan Wright   | HR         | 55000.00 |
+|       6 | Fiona Glen    | Marketing  | 68000.00 |
++---------+---------------+------------+----------+
+6 rows in set (0.010 sec)
+
+mysql>
+
+
+
+
+
+
+
+
+Enter password: ************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 20
+Server version: 9.7.2 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> USE CSA05_LAB;
+Database changed
+mysql> CREATE OR REPLACE VIEW v1 AS
+    -> SELECT employee_id, salary
+    -> FROM employees1;
+Query OK, 0 rows affected (0.195 sec)
+
+mysql>
+mysql> SELECT * FROM v1;
++-------------+-----------+
+| employee_id | salary    |
++-------------+-----------+
+|          10 | 150000.00 |
+|          11 | 140000.00 |
+|          12 | 160000.00 |
++-------------+-----------+
+3 rows in set (0.426 sec)
+
+mysql> INSERT INTO v1 (employee_id, salary)
+    -> VALUES (13, 130000);
+Query OK, 1 row affected (1.915 sec)
+
+mysql>
+mysql> DELETE FROM v1
+    -> WHERE employee_id = 13;
+Query OK, 1 row affected (0.142 sec)
+
+mysql> CREATE INDEX index1
+    -> ON employees1(salary);
+Query OK, 0 rows affected (2.755 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql> SELECT first_name
+    -> FROM employees1
+    -> WHERE salary > 145000;
++------------+
+| first_name |
++------------+
+| Arun       |
+| Rahul      |
++------------+
+2 rows in set (0.053 sec)
+
+mysql> DROP INDEX index1 ON employees1;
+Query OK, 0 rows affected (0.554 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> CREATE INDEX index2
+    -> ON employees1(employee_id);
+Query OK, 0 rows affected (0.316 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql> SELECT first_name
+    -> FROM employees1
+    -> WHERE employee_id = 10;
++------------+
+| first_name |
++------------+
+| Arun       |
++------------+
+1 row in set (0.016 sec)
+
+mysql>
+mysql> DROP INDEX index2 ON employees1;
+Query OK, 0 rows affected (0.183 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO DBMS_Stud (Name, Department)
+    -> VALUES ('Arun', 'CSE'),
+    ->        ('Priya', 'ECE'),
+    ->        ('Rahul', 'IT');
+Query OK, 3 rows affected (0.498 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql> SELECT * FROM DBMS_Stud;
++-------+-------+------------+
+| RegNo | Name  | Department |
++-------+-------+------------+
+|     1 | Arun  | CSE        |
+|     2 | Priya | ECE        |
+|     3 | Rahul | IT         |
++-------+-------+------------+
+3 rows in set (0.007 sec)
+
+mysql> INSERT INTO DBMS_Stud (RegNo, Name, Department)
+    -> VALUES (100, 'Kumar', 'CSE');
+Query OK, 1 row affected (0.445 sec)
+
+mysql>
+mysql> SELECT * FROM DBMS_Stud;
++-------+-------+------------+
+| RegNo | Name  | Department |
++-------+-------+------------+
+|     1 | Arun  | CSE        |
+|     2 | Priya | ECE        |
+|     3 | Rahul | IT         |
+|   100 | Kumar | CSE        |
++-------+-------+------------+
+4 rows in set (0.007 sec)
+
+mysql> ALTER TABLE DBMS_Stud
+    -> MODIFY RegNo INT NOT NULL;
+Query OK, 4 rows affected (1.911 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql> DESC DBMS_Stud;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| RegNo      | int         | NO   | PRI | NULL    |       |
+| Name       | varchar(30) | YES  |     | NULL    |       |
+| Department | varchar(30) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.150 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE FUNCTION WhileDemo()
+    -> RETURNS VARCHAR(100)
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE x INT DEFAULT 1;
+    ->     DECLARE result_str VARCHAR(100) DEFAULT '';
+    ->
+    ->     WHILE x <= 5 DO
+    ->         SET result_str = CONCAT(result_str, x, ' ');
+    ->         SET x = x + 1;
+    ->     END WHILE;
+    ->
+    ->     RETURN result_str;
+    -> END $$
+Query OK, 0 rows affected (0.626 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql>
+mysql> SELECT WhileDemo();
++-------------+
+| WhileDemo() |
++-------------+
+| 1 2 3 4 5   |
++-------------+
+1 row in set (0.472 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE FUNCTION RepeatDemo()
+    -> RETURNS INT
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE income INT DEFAULT 1000;
+    ->
+    ->     REPEAT
+    ->         SET income = income + 500;
+    ->     UNTIL income >= 4000
+    ->     END REPEAT;
+    ->
+    ->     RETURN income;
+    -> END $$
+Query OK, 0 rows affected (0.460 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql>
+mysql> SELECT RepeatDemo();
++--------------+
+| RepeatDemo() |
++--------------+
+|         4000 |
++--------------+
+1 row in set (0.072 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE PROCEDURE CaseDemo(IN income INT)
+    -> BEGIN
+    ->     SELECT CASE
+    ->         WHEN income > 50000 THEN 'PLATINUM'
+    ->         WHEN income >= 10000 THEN 'GOLD'
+    ->         ELSE 'SILVER'
+    ->     END AS CustomerLevel;
+    -> END $$
+Query OK, 0 rows affected (0.065 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql>
+mysql> CALL CaseDemo(60000);
++---------------+
+| CustomerLevel |
++---------------+
+| PLATINUM      |
++---------------+
+1 row in set (0.051 sec)
+
+Query OK, 0 rows affected (0.086 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE PROCEDURE LoopDemo()
+    -> BEGIN
+    ->     DECLARE x INT DEFAULT 1;
+    ->
+    ->     myloop: LOOP
+    ->         SELECT x;
+    ->
+    ->         SET x = x + 1;
+    ->
+    ->         IF x > 5 THEN
+    ->             LEAVE myloop;
+    ->         END IF;
+    ->     END LOOP myloop;
+    -> END $$
+Query OK, 0 rows affected (0.487 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql>
+mysql> CALL LoopDemo();
++------+
+| x    |
++------+
+|    1 |
++------+
+1 row in set (0.043 sec)
+
++------+
+| x    |
++------+
+|    2 |
++------+
+1 row in set (0.071 sec)
+
++------+
+| x    |
++------+
+|    3 |
++------+
+1 row in set (0.093 sec)
+
++------+
+| x    |
++------+
+|    4 |
++------+
+1 row in set (0.111 sec)
+
++------+
+| x    |
++------+
+|    5 |
++------+
+1 row in set (0.130 sec)
+
+Query OK, 0 rows affected (0.150 sec)
+
+mysql> CREATE TABLE TCL_Demo (
+    ->     ID INT PRIMARY KEY,
+    ->     Name VARCHAR(30)
+    -> );
+Query OK, 0 rows affected (0.325 sec)
+
+mysql> START TRANSACTION;
+Query OK, 0 rows affected (0.428 sec)
+
+mysql>
+mysql> INSERT INTO TCL_Demo VALUES (1, 'Arun');
+Query OK, 1 row affected (0.024 sec)
+
+mysql>
+mysql> COMMIT;
+Query OK, 0 rows affected (0.040 sec)
+
+mysql>
+mysql> SELECT * FROM TCL_Demo;
++----+------+
+| ID | Name |
++----+------+
+|  1 | Arun |
++----+------+
+1 row in set (0.013 sec)
+
+mysql> START TRANSACTION;
+Query OK, 0 rows affected (0.006 sec)
+
+mysql>
+mysql> INSERT INTO TCL_Demo VALUES (2, 'Priya');
+Query OK, 1 row affected (0.009 sec)
+
+mysql>
+mysql> SAVEPOINT sp1;
+Query OK, 0 rows affected (0.006 sec)
+
+mysql>
+mysql> INSERT INTO TCL_Demo VALUES (3, 'Rahul');
+Query OK, 1 row affected (0.014 sec)
+
+mysql>
+mysql> ROLLBACK TO sp1;
+Query OK, 0 rows affected (0.006 sec)
+
+mysql>
+mysql> COMMIT;
+Query OK, 0 rows affected (0.032 sec)
+
+mysql>
+mysql> SELECT * FROM TCL_Demo;
++----+-------+
+| ID | Name  |
++----+-------+
+|  1 | Arun  |
+|  2 | Priya |
++----+-------+
+2 rows in set (0.007 sec)
+
+mysql> CREATE USER IF NOT EXISTS 'labuser'@'localhost'
+    -> IDENTIFIED BY 'Lab@12345';
+Query OK, 0 rows affected (0.432 sec)
+
+mysql> GRANT SELECT, INSERT
+    -> ON CSA05_LAB.*
+    -> TO 'labuser'@'localhost';
+Query OK, 0 rows affected (0.110 sec)
+
+mysql> REVOKE INSERT
+    -> ON CSA05_LAB.*
+    -> FROM 'labuser'@'localhost';
+Query OK, 0 rows affected (0.063 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE PROCEDURE GetStudents()
+    -> BEGIN
+    ->     SELECT * FROM STUDENT;
+    -> END $$
+Query OK, 0 rows affected (0.084 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql>
+mysql> CALL GetStudents();
++-----------+-------+--------+------------+------------+----------+
+| RegNo     | Name  | Gender | DOB        | MobileNo   | City     |
++-----------+-------+--------+------------+------------+----------+
+| 191711342 | Arun  | M      | 2006-01-10 | 9876500001 | Chennai  |
+| 191711343 | Priya | F      | 2006-05-20 | 9876500002 | Tambaram |
+| 191711344 | Rahul | M      | 2005-11-15 | 9876500003 | Chennai  |
++-----------+-------+--------+------------+------------+----------+
+3 rows in set (0.016 sec)
+
+Query OK, 0 rows affected (0.205 sec)
+
+mysql> CREATE TABLE IF NOT EXISTS customers (
+    ->     customerNumber INT PRIMARY KEY,
+    ->     creditLimit DECIMAL(10,2)
+    -> );
+Query OK, 0 rows affected (0.191 sec)
+
+mysql>
+mysql> INSERT IGNORE INTO customers VALUES
+    -> (101, 60000),
+    -> (102, 30000),
+    -> (103, 5000);
+Query OK, 3 rows affected (0.087 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE PROCEDURE GetCustomerLevel(
+    ->     IN p_customer_number INT,
+    ->     OUT p_customer_level VARCHAR(20)
+    -> )
+    -> BEGIN
+    ->     DECLARE v_credit_limit DECIMAL(10,2);
+    ->
+    ->     SELECT creditLimit
+    ->     INTO v_credit_limit
+    ->     FROM customers
+    ->     WHERE customerNumber = p_customer_number;
+    ->
+    ->     IF v_credit_limit > 50000 THEN
+    ->         SET p_customer_level = 'PLATINUM';
+    ->     ELSEIF v_credit_limit >= 10000 THEN
+    ->         SET p_customer_level = 'GOLD';
+    ->     ELSE
+    ->         SET p_customer_level = 'SILVER';
+    ->     END IF;
+    -> END $$
+Query OK, 0 rows affected (1.201 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> ;
+ERROR:
+No query specified
+
+mysql> CALL GetCustomerLevel(101, @level);
+Query OK, 1 row affected (0.428 sec)
+
+mysql>
+mysql> SELECT @level;
++----------+
+| @level   |
++----------+
+| PLATINUM |
++----------+
+1 row in set (0.400 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE FUNCTION CustomerLevel(
+    ->     credit_limit DECIMAL(10,2)
+    -> )
+    -> RETURNS VARCHAR(20)
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     IF credit_limit > 50000 THEN
+    ->         RETURN 'PLATINUM';
+    ->     ELSEIF credit_limit >= 10000 THEN
+    ->         RETURN 'GOLD';
+    ->     ELSE
+    ->         RETURN 'SILVER';
+    ->     END IF;
+    -> END $$
+Query OK, 0 rows affected (0.166 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql>
+mysql> SELECT CustomerLevel(60000);
++----------------------+
+| CustomerLevel(60000) |
++----------------------+
+| PLATINUM             |
++----------------------+
+1 row in set (0.022 sec)
+
+mysql> SET SESSION max_sp_recursion_depth = 255;
+Query OK, 0 rows affected (0.111 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE PROCEDURE Factorial(
+    ->     IN n INT,
+    ->     OUT result BIGINT
+    -> )
+    -> BEGIN
+    ->     IF n < 0 THEN
+    ->         SET result = NULL;
+    ->     ELSEIF n = 0 OR n = 1 THEN
+    ->         SET result = 1;
+    ->     ELSE
+    ->         CALL Factorial(n - 1, @previous);
+    ->         SET result = n * @previous;
+    ->     END IF;
+    -> END $$
+Query OK, 0 rows affected (0.077 sec)
+
+mysql>
+mysql> DELIMITER ;CALL Factorial(5, @answer);
+mysql>
+mysql> SELECT @answer;
+    -> ;
+    -> CALL Factorial(5, @answer);
+    ->
+    -> SELECT @answer;
+    ->
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| colledgedb         |
+| companydb          |
+| csa0511            |
+| csa05_lab          |
+| employee           |
+| faculty_db         |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+10 rows in set (0.761 sec)
+
+mysql> USE companydb;
+Database changed
+mysql> CREATE TABLE lab_employees (
+    ->     id INT,
+    ->     Name VARCHAR(100),
+    ->     email VARCHAR(100)
+    -> );
+ERROR 1050 (42S01): Table 'lab_employees' already exists
+mysql>
+mysql> INSERT INTO lab_employees VALUES
+    -> (1, 'Harry Potter', 'pharry@warnerbros.com'),
+    -> (2, 'Clark Kent', 'kclark@dccomics.com'),
+    -> (3, 'Tony Stark', 'stony@marvel.com');
+Query OK, 3 rows affected (0.175 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE PROCEDURE build_email_list(INOUT email_list VARCHAR(4000))
+    -> BEGIN
+    ->     DECLARE finished INT DEFAULT 0;
+    ->     DECLARE v_email VARCHAR(100);
+    ->
+    ->     DECLARE email_cursor CURSOR FOR
+    ->     SELECT email FROM lab_employees;
+    ->
+    ->     DECLARE CONTINUE HANDLER FOR NOT FOUND
+    ->     SET finished = 1;
+    ->
+    ->     OPEN email_cursor;
+    ->
+    ->     get_email: LOOP
+    ->         FETCH email_cursor INTO v_email;
+    ->
+    ->         IF finished = 1 THEN
+    ->             LEAVE get_email;
+    ->         END IF;
+    ->
+    ->         SET email_list = CONCAT(email_list, v_email, ';');
+    ->     END LOOP;
+    ->
+    ->     CLOSE email_cursor;
+    -> END$$
+Query OK, 0 rows affected (0.255 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> SET @email_list = '';
+Query OK, 0 rows affected (0.419 sec)
+
+mysql>
+mysql> CALL build_email_list(@email_list);
+Query OK, 0 rows affected (0.162 sec)
+
+mysql>
+mysql> SELECT @email_list;
++------------------------------------------------------------------------------------------------------------------------+
+| @email_list                                                                                                            |
++------------------------------------------------------------------------------------------------------------------------+
+| pharry@warnerbros.com;kclark@dccomics.com;stony@marvel.com;pharry@warnerbros.com;kclark@dccomics.com;stony@marvel.com; |
++------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.010 sec)
+
+mysql> CREATE TABLE lab_employee (
+    ->     ID INT PRIMARY KEY,
+    ->     Name VARCHAR(100),
+    ->     Email VARCHAR(100)
+    -> );
+Query OK, 0 rows affected (0.300 sec)
+
+mysql>
+mysql> INSERT INTO lab_employee VALUES
+    -> (1, 'Arun', 'arun@gmail.com'),
+    -> (2, 'Kumar', 'kumar@gmail.com');
+Query OK, 2 rows affected (0.463 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> CREATE TABLE lab_employees_audit (
+    ->     ID INT,
+    ->     Name VARCHAR(100),
+    ->     Email VARCHAR(100),
+    ->     Action_Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    -> );
+Query OK, 0 rows affected (0.667 sec)
+
+mysql> DELIMITER $$
+mysql>
+mysql> CREATE TRIGGER employee_update
+    -> BEFORE UPDATE ON lab_employee
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     INSERT INTO lab_employees_audit
+    ->     (ID, Name, Email)
+    ->     VALUES
+    ->     (OLD.ID, OLD.Name, OLD.Email);
+    -> END$$
+Query OK, 0 rows affected (0.141 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> UPDATE lab_employee
+    -> SET Name = 'Arun Kumar'
+    -> WHERE ID = 1;
+Query OK, 1 row affected (0.532 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>
+mysql> SELECT * FROM lab_employee;
++----+------------+-----------------+
+| ID | Name       | Email           |
++----+------------+-----------------+
+|  1 | Arun Kumar | arun@gmail.com  |
+|  2 | Kumar      | kumar@gmail.com |
++----+------------+-----------------+
+2 rows in set (0.006 sec)
+
+mysql>
+mysql> SELECT * FROM lab_employees_audit;
++------+------+----------------+---------------------+
+| ID   | Name | Email          | Action_Date         |
++------+------+----------------+---------------------+
+|    1 | Arun | arun@gmail.com | 2026-11-04 11:49:17 |
++------+------+----------------+---------------------+
+1 row in set (0.008 sec)
+
+mysql> SELECT REPLACE('Hello World', 'World', 'MySQL');
++------------------------------------------+
+| REPLACE('Hello World', 'World', 'MySQL') |
++------------------------------------------+
+| Hello MySQL                              |
++------------------------------------------+
+1 row in set (0.430 sec)
+
+mysql> SELECT REPEAT('SQL ', 3);
++-------------------+
+| REPEAT('SQL ', 3) |
++-------------------+
+| SQL SQL SQL       |
++-------------------+
+1 row in set (0.006 sec)
+
+mysql> SELECT REVERSE('DATABASE');
++---------------------+
+| REVERSE('DATABASE') |
++---------------------+
+| ESABATAD            |
++---------------------+
+1 row in set (0.033 sec)
+
+mysql> SELECT RIGHT('DATABASE', 4);
++----------------------+
+| RIGHT('DATABASE', 4) |
++----------------------+
+| BASE                 |
++----------------------+
+1 row in set (0.442 sec)
+
+mysql> SELECT LEFT('DATABASE', 4);
++---------------------+
+| LEFT('DATABASE', 4) |
++---------------------+
+| DATA                |
++---------------------+
+1 row in set (0.005 sec)
+
+mysql> SELECT RPAD('SQL', 8, '*');
++---------------------+
+| RPAD('SQL', 8, '*') |
++---------------------+
+| SQL*****            |
++---------------------+
+1 row in set (0.013 sec)
+
+mysql> SELECT LPAD('SQL', 8, '*');
++---------------------+
+| LPAD('SQL', 8, '*') |
++---------------------+
+| *****SQL            |
++---------------------+
+1 row in set (0.006 sec)
+
+mysql> SELECT OCT(25);
++---------+
+| OCT(25) |
++---------+
+| 31      |
++---------+
+1 row in set (0.020 sec)
+
+mysql> SELECT CONCAT('Hello', SPACE(5), 'World');
++------------------------------------+
+| CONCAT('Hello', SPACE(5), 'World') |
++------------------------------------+
+| Hello     World                    |
++------------------------------------+
+1 row in set (0.016 sec)
+
+mysql> SELECT SUBSTRING('DATABASE', 2, 4);
++-----------------------------+
+| SUBSTRING('DATABASE', 2, 4) |
++-----------------------------+
+| ATAB                        |
++-----------------------------+
+1 row in set (0.395 sec)
+
+mysql> SELECT SUBSTR('DATABASE', 2, 4);
++--------------------------+
+| SUBSTR('DATABASE', 2, 4) |
++--------------------------+
+| ATAB                     |
++--------------------------+
+1 row in set (0.007 sec)
+
+mysql> SELECT UPPER('database');
++-------------------+
+| UPPER('database') |
++-------------------+
+| DATABASE          |
++-------------------+
+1 row in set (0.413 sec)
+
+mysql> SELECT LOWER('DATABASE');
++-------------------+
+| LOWER('DATABASE') |
++-------------------+
+| database          |
++-------------------+
+1 row in set (0.360 sec)
+
+mysql> SELECT TRIM('   HELLO   ');
++---------------------+
+| TRIM('   HELLO   ') |
++---------------------+
+| HELLO               |
++---------------------+
+1 row in set (0.404 sec)
+
+mysql> SELECT RTRIM('HELLO   ');
++-------------------+
+| RTRIM('HELLO   ') |
++-------------------+
+| HELLO             |
++-------------------+
+1 row in set (0.403 sec)
+
+mysql> SELECT LTRIM('   HELLO');
++-------------------+
+| LTRIM('   HELLO') |
++-------------------+
+| HELLO             |
++-------------------+
+1 row in set (0.008 sec)
+
+mysql> SELECT LENGTH('DATABASE');
++--------------------+
+| LENGTH('DATABASE') |
++--------------------+
+|                  8 |
++--------------------+
+1 row in set (0.034 sec)
+
+mysql> SELECT BIT_LENGTH('SQL');
++-------------------+
+| BIT_LENGTH('SQL') |
++-------------------+
+|                24 |
++-------------------+
+1 row in set (0.478 sec)
+
+mysql> SELECT CHAR_LENGTH('DATABASE');
++-------------------------+
+| CHAR_LENGTH('DATABASE') |
++-------------------------+
+|                       8 |
++-------------------------+
+1 row in set (0.173 sec)
+
+mysql> SELECT CONCAT('HELLO', ' ', 'WORLD');
++-------------------------------+
+| CONCAT('HELLO', ' ', 'WORLD') |
++-------------------------------+
+| HELLO WORLD                   |
++-------------------------------+
+1 row in set (0.011 sec)
+
+mysql> SELECT INSTR('DATABASE', 'BASE');
++---------------------------+
+| INSTR('DATABASE', 'BASE') |
++---------------------------+
+|                         5 |
++---------------------------+
+1 row in set (0.006 sec)
+
+mysql> SELECT LOCATE('BASE', 'DATABASE');
++----------------------------+
+| LOCATE('BASE', 'DATABASE') |
++----------------------------+
+|                          5 |
++----------------------------+
+1 row in set (0.010 sec)
+
+mysql>
