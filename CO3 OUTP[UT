@@ -1,0 +1,2675 @@
+CO3 AT 1 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.005 sec) 
+
+ 
+
+mysql> -- CSA05 DBMS ASSIGNMENT 3 - CO3 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> -- SHOPNEST ONLINE RETAIL ORDER MANAGEMENT DATABASE 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- COMPLETE MYSQL IMPLEMENTATION 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> -- DATABASE CREATION 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE DATABASE IF NOT EXISTS ShopNestDB; 
+
+Query OK, 1 row affected (0.518 sec) 
+
+ 
+
+mysql> USE ShopNestDB; 
+
+Database changed 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- CLEANUP (ALLOWS SCRIPT TO BE RUN AGAIN) 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> DROP TABLE IF EXISTS SUPPLY; 
+
+Query OK, 0 rows affected, 1 warning (0.071 sec) 
+
+ 
+
+mysql> DROP TABLE IF EXISTS SupplierWarehouse; 
+
+Query OK, 0 rows affected, 1 warning (0.036 sec) 
+
+ 
+
+mysql> DROP TABLE IF EXISTS CategoryWarehouse; 
+
+Query OK, 0 rows affected, 1 warning (0.033 sec) 
+
+ 
+
+mysql> DROP TABLE IF EXISTS SupplierCategory; 
+
+Query OK, 0 rows affected, 1 warning (0.034 sec) 
+
+ 
+
+mysql> DROP TABLE IF EXISTS ProductColour; 
+
+Query OK, 0 rows affected, 1 warning (0.034 sec) 
+
+ 
+
+mysql> DROP TABLE IF EXISTS ProductTag; 
+
+Query OK, 0 rows affected, 1 warning (0.025 sec) 
+
+ 
+
+mysql> DROP TABLE IF EXISTS ORDER_LINE; 
+
+Query OK, 0 rows affected, 1 warning (0.025 sec) 
+
+ 
+
+mysql> DROP TABLE IF EXISTS OrderItem; 
+
+Query OK, 0 rows affected, 1 warning (0.037 sec) 
+
+ 
+
+mysql> DROP TABLE IF EXISTS OrderHeader; 
+
+Query OK, 0 rows affected, 1 warning (0.032 sec) 
+
+ 
+
+mysql> DROP TABLE IF EXISTS StreetPIN; 
+
+Query OK, 0 rows affected, 1 warning (0.034 sec) 
+
+ 
+
+mysql> DROP TABLE IF EXISTS PostalCode; 
+
+Query OK, 0 rows affected, 1 warning (0.032 sec) 
+
+ 
+
+mysql> DROP TABLE IF EXISTS Product; 
+
+Query OK, 0 rows affected, 1 warning (0.040 sec) 
+
+ 
+
+mysql> DROP TABLE IF EXISTS Warehouse; 
+
+Query OK, 0 rows affected, 1 warning (0.028 sec) 
+
+ 
+
+mysql> DROP TABLE IF EXISTS Category; 
+
+Query OK, 0 rows affected, 1 warning (0.027 sec) 
+
+ 
+
+mysql> DROP TABLE IF EXISTS Supplier; 
+
+Query OK, 0 rows affected, 1 warning (0.036 sec) 
+
+ 
+
+mysql> DROP TABLE IF EXISTS Customer; 
+
+Query OK, 0 rows affected, 1 warning (0.029 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.006 sec) 
+
+ 
+
+mysql> -- TASK 1: FUNCTIONAL DEPENDENCIES 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> -- TASK 4: 1NF AND 2NF 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- TASK 5: 3NF AND BCNF 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- CREATE UNNORMALISED TABLE 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE ORDER_LINE ( 
+
+    ->     OrderID INT, 
+
+    ->     OrderDate DATE, 
+
+    ->     CustomerID INT, 
+
+    ->     CustomerName VARCHAR(100), 
+
+    ->     CustomerEmail VARCHAR(100), 
+
+    ->     ShipStreet VARCHAR(150), 
+
+    ->     ShipCity VARCHAR(100), 
+
+    ->     ShipPIN VARCHAR(10), 
+
+    ->     ShipState VARCHAR(100), 
+
+    ->     ProductID INT, 
+
+    ->     ProductName VARCHAR(100), 
+
+    ->     UnitPrice DECIMAL(10,2), 
+
+    ->     CategoryID INT, 
+
+    ->     CategoryName VARCHAR(100), 
+
+    ->     SupplierID INT, 
+
+    ->     SupplierName VARCHAR(100), 
+
+    ->     SupplierPhone VARCHAR(20), 
+
+    ->     Quantity INT, 
+
+    ->     WarehouseID INT, 
+
+    ->     WarehouseCity VARCHAR(100), 
+
+    ->     TagList VARCHAR(500), 
+
+    ->     ColourList VARCHAR(500), 
+
+    ->     PRIMARY KEY (OrderID, ProductID) 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.532 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> -- TASK 5: CREATE NORMALISED TABLES 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- 3NF / BCNF DESIGN 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> -- CUSTOMER TABLE 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE Customer ( 
+
+    ->     CustomerID INT PRIMARY KEY, 
+
+    ->     CustomerName VARCHAR(100) NOT NULL, 
+
+    ->     CustomerEmail VARCHAR(100) UNIQUE NOT NULL 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.367 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- SUPPLIER TABLE 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE Supplier ( 
+
+    ->     SupplierID INT PRIMARY KEY, 
+
+    ->     SupplierName VARCHAR(100) NOT NULL, 
+
+    ->     SupplierPhone VARCHAR(20) NOT NULL 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.271 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- CATEGORY TABLE 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE Category ( 
+
+    ->     CategoryID INT PRIMARY KEY, 
+
+    ->     CategoryName VARCHAR(100) UNIQUE NOT NULL 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.354 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- WAREHOUSE TABLE 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE Warehouse ( 
+
+    ->     WarehouseID INT PRIMARY KEY, 
+
+    ->     WarehouseCity VARCHAR(100) NOT NULL 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.248 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- POSTAL CODE TABLE 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE PostalCode ( 
+
+    ->     ShipPIN VARCHAR(10) PRIMARY KEY, 
+
+    ->     ShipCity VARCHAR(100) NOT NULL, 
+
+    ->     ShipState VARCHAR(100) NOT NULL 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.271 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- STREET AND PIN TABLE 
+
+Query OK, 0 rows affected (0.005 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE StreetPIN ( 
+
+    ->     ShipStreet VARCHAR(150), 
+
+    ->     ShipPIN VARCHAR(10), 
+
+    ->     PRIMARY KEY (ShipStreet, ShipPIN), 
+
+    ->     FOREIGN KEY (ShipPIN) 
+
+    ->         REFERENCES PostalCode(ShipPIN) 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.365 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- PRODUCT TABLE 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE Product ( 
+
+    ->     ProductID INT PRIMARY KEY, 
+
+    ->     ProductName VARCHAR(100) NOT NULL, 
+
+    ->     UnitPrice DECIMAL(10,2) NOT NULL CHECK (UnitPrice >= 0), 
+
+    ->     CategoryID INT NOT NULL, 
+
+    ->     SupplierID INT NOT NULL, 
+
+    ->     FOREIGN KEY (CategoryID) 
+
+    ->         REFERENCES Category(CategoryID), 
+
+    ->     FOREIGN KEY (SupplierID) 
+
+    ->         REFERENCES Supplier(SupplierID) 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.411 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ORDER HEADER TABLE 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE OrderHeader ( 
+
+    ->     OrderID INT PRIMARY KEY, 
+
+    ->     OrderDate DATE NOT NULL, 
+
+    ->     CustomerID INT NOT NULL, 
+
+    ->     ShipStreet VARCHAR(150) NOT NULL, 
+
+    ->     ShipPIN VARCHAR(10) NOT NULL, 
+
+    ->     FOREIGN KEY (CustomerID) 
+
+    ->         REFERENCES Customer(CustomerID), 
+
+    ->     FOREIGN KEY (ShipStreet, ShipPIN) 
+
+    ->         REFERENCES StreetPIN(ShipStreet, ShipPIN) 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.389 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ORDER ITEM TABLE 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE OrderItem ( 
+
+    ->     OrderID INT, 
+
+    ->     ProductID INT, 
+
+    ->     Quantity INT NOT NULL CHECK (Quantity > 0), 
+
+    ->     WarehouseID INT NOT NULL, 
+
+    ->     UnitPrice DECIMAL(10,2) NOT NULL CHECK (UnitPrice >= 0), 
+
+    ->     PRIMARY KEY (OrderID, ProductID), 
+
+    ->     FOREIGN KEY (OrderID) 
+
+    ->         REFERENCES OrderHeader(OrderID), 
+
+    ->     FOREIGN KEY (ProductID) 
+
+    ->         REFERENCES Product(ProductID), 
+
+    ->     FOREIGN KEY (WarehouseID) 
+
+    ->         REFERENCES Warehouse(WarehouseID) 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.429 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- TASK 6: MULTIVALUED DEPENDENCIES AND 4NF 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> -- PRODUCT TAG TABLE 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE ProductTag ( 
+
+    ->     ProductID INT, 
+
+    ->     Tag VARCHAR(100), 
+
+    ->     PRIMARY KEY (ProductID, Tag), 
+
+    ->     FOREIGN KEY (ProductID) 
+
+    ->         REFERENCES Product(ProductID) 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.251 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- PRODUCT COLOUR TABLE 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE ProductColour ( 
+
+    ->     ProductID INT, 
+
+    ->     Colour VARCHAR(50), 
+
+    ->     PRIMARY KEY (ProductID, Colour), 
+
+    ->     FOREIGN KEY (ProductID) 
+
+    ->         REFERENCES Product(ProductID) 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.261 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> -- TASK 7: JOIN DEPENDENCIES AND 5NF 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> 
+
+mysql> -- SUPPLIER CATEGORY TABLE 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE SupplierCategory ( 
+
+    ->     SupplierID INT, 
+
+    ->     CategoryID INT, 
+
+    ->     PRIMARY KEY (SupplierID, CategoryID), 
+
+    ->     FOREIGN KEY (SupplierID) 
+
+    ->         REFERENCES Supplier(SupplierID), 
+
+    ->     FOREIGN KEY (CategoryID) 
+
+    ->         REFERENCES Category(CategoryID) 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.300 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- CATEGORY WAREHOUSE TABLE 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE CategoryWarehouse ( 
+
+    ->     CategoryID INT, 
+
+    ->     WarehouseID INT, 
+
+    ->     PRIMARY KEY (CategoryID, WarehouseID), 
+
+    ->     FOREIGN KEY (CategoryID) 
+
+    ->         REFERENCES Category(CategoryID), 
+
+    ->     FOREIGN KEY (WarehouseID) 
+
+    ->         REFERENCES Warehouse(WarehouseID) 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.331 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- SUPPLIER WAREHOUSE TABLE 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE SupplierWarehouse ( 
+
+    ->     SupplierID INT, 
+
+    ->     WarehouseID INT, 
+
+    ->     PRIMARY KEY (SupplierID, WarehouseID), 
+
+    ->     FOREIGN KEY (SupplierID) 
+
+    ->         REFERENCES Supplier(SupplierID), 
+
+    ->     FOREIGN KEY (WarehouseID) 
+
+    ->         REFERENCES Warehouse(WarehouseID) 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.321 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- THREE-ATTRIBUTE SUPPLY RELATION 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE TABLE SUPPLY ( 
+
+    ->     SupplierID INT, 
+
+    ->     CategoryID INT, 
+
+    ->     WarehouseID INT, 
+
+    ->     PRIMARY KEY (SupplierID, CategoryID, WarehouseID), 
+
+    ->     FOREIGN KEY (SupplierID) 
+
+    ->         REFERENCES Supplier(SupplierID), 
+
+    ->     FOREIGN KEY (CategoryID) 
+
+    ->         REFERENCES Category(CategoryID), 
+
+    ->     FOREIGN KEY (WarehouseID) 
+
+    ->         REFERENCES Warehouse(WarehouseID) 
+
+    -> ); 
+
+Query OK, 0 rows affected (0.433 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> -- SAMPLE DATA INSERTION 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> -- CUSTOMER DATA 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> INSERT INTO Customer VALUES 
+
+    -> (1, 'Arun Kumar', 'arun@gmail.com'), 
+
+    -> (2, 'Rahul Sharma', 'rahul@gmail.com'), 
+
+    -> (3, 'Priya Kumar', 'priya@gmail.com'), 
+
+    -> (4, 'Karthik Raj', 'karthik@gmail.com'); 
+
+Query OK, 4 rows affected (0.056 sec) 
+
+Records: 4  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- SUPPLIER DATA 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> INSERT INTO Supplier VALUES 
+
+    -> (101, 'ABC Electronics', '9876543210'), 
+
+    -> (102, 'Smart Products', '9876543211'), 
+
+    -> (103, 'Global Traders', '9876543212'); 
+
+Query OK, 3 rows affected (0.042 sec) 
+
+Records: 3  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- CATEGORY DATA 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> INSERT INTO Category VALUES 
+
+    -> (201, 'Electronics'), 
+
+    -> (202, 'Clothing'), 
+
+    -> (203, 'Accessories'); 
+
+Query OK, 3 rows affected (0.055 sec) 
+
+Records: 3  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- WAREHOUSE DATA 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> INSERT INTO Warehouse VALUES 
+
+    -> (301, 'Chennai'), 
+
+    -> (302, 'Bangalore'), 
+
+    -> (303, 'Mumbai'); 
+
+Query OK, 3 rows affected (0.041 sec) 
+
+Records: 3  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- POSTAL CODE DATA 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> INSERT INTO PostalCode VALUES 
+
+    -> ('600001', 'Chennai', 'Tamil Nadu'), 
+
+    -> ('560001', 'Bangalore', 'Karnataka'), 
+
+    -> ('400001', 'Mumbai', 'Maharashtra'); 
+
+Query OK, 3 rows affected (0.057 sec) 
+
+Records: 3  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- STREET DATA 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> INSERT INTO StreetPIN VALUES 
+
+    -> ('Anna Salai', '600001'), 
+
+    -> ('MG Road', '560001'), 
+
+    -> ('Marine Drive', '400001'); 
+
+Query OK, 3 rows affected (0.046 sec) 
+
+Records: 3  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- PRODUCT DATA 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> INSERT INTO Product VALUES 
+
+    -> (501, 'Laptop', 55000.00, 201, 101), 
+
+    -> (502, 'Smartphone', 25000.00, 201, 101), 
+
+    -> (503, 'T Shirt', 800.00, 202, 102), 
+
+    -> (504, 'Headphones', 1500.00, 203, 103); 
+
+Query OK, 4 rows affected (0.067 sec) 
+
+Records: 4  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ORDER HEADER DATA 
+
+Query OK, 0 rows affected (0.006 sec) 
+
+ 
+
+mysql> 
+
+mysql> INSERT INTO OrderHeader VALUES 
+
+    -> (1001, '2026-10-01', 1, 'Anna Salai', '600001'), 
+
+    -> (1002, '2026-10-02', 2, 'MG Road', '560001'), 
+
+    -> (1003, '2026-10-03', 3, 'Marine Drive', '400001'), 
+
+    -> (1004, '2026-10-04', 4, 'Anna Salai', '600001'); 
+
+Query OK, 4 rows affected (0.077 sec) 
+
+Records: 4  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ORDER ITEM DATA 
+
+Query OK, 0 rows affected (0.005 sec) 
+
+ 
+
+mysql> 
+
+mysql> INSERT INTO OrderItem VALUES 
+
+    -> (1001, 501, 1, 301, 53000.00), 
+
+    -> (1001, 502, 2, 301, 24000.00), 
+
+    -> (1002, 503, 3, 302, 800.00), 
+
+    -> (1003, 504, 1, 303, 1400.00), 
+
+    -> (1004, 501, 1, 301, 55000.00); 
+
+Query OK, 5 rows affected (0.071 sec) 
+
+Records: 5  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- PRODUCT TAG DATA 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> INSERT INTO ProductTag VALUES 
+
+    -> (501, 'Computer'), 
+
+    -> (501, 'Work'), 
+
+    -> (501, 'Electronics'), 
+
+    -> (502, 'Mobile'), 
+
+    -> (502, 'Electronics'), 
+
+    -> (503, 'Fashion'), 
+
+    -> (504, 'Audio'); 
+
+Query OK, 7 rows affected (0.059 sec) 
+
+Records: 7  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- PRODUCT COLOUR DATA 
+
+Query OK, 0 rows affected (0.005 sec) 
+
+ 
+
+mysql> 
+
+mysql> INSERT INTO ProductColour VALUES 
+
+    -> (501, 'Black'), 
+
+    -> (501, 'Silver'), 
+
+    -> (502, 'Blue'), 
+
+    -> (502, 'Black'), 
+
+    -> (503, 'Red'), 
+
+    -> (503, 'White'), 
+
+    -> (504, 'Black'); 
+
+Query OK, 7 rows affected (0.054 sec) 
+
+Records: 7  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- 5NF SAMPLE DATA 
+
+Query OK, 0 rows affected (0.005 sec) 
+
+ 
+
+mysql> 
+
+mysql> INSERT INTO SupplierCategory VALUES 
+
+    -> (101, 201), 
+
+    -> (102, 202), 
+
+    -> (103, 203); 
+
+Query OK, 3 rows affected (0.052 sec) 
+
+Records: 3  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> INSERT INTO CategoryWarehouse VALUES 
+
+    -> (201, 301), 
+
+    -> (201, 302), 
+
+    -> (202, 302), 
+
+    -> (203, 303); 
+
+Query OK, 4 rows affected (0.047 sec) 
+
+Records: 4  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> INSERT INTO SupplierWarehouse VALUES 
+
+    -> (101, 301), 
+
+    -> (101, 302), 
+
+    -> (102, 302), 
+
+    -> (103, 303); 
+
+Query OK, 4 rows affected (0.043 sec) 
+
+Records: 4  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- SUPPLY SAMPLE DATA 
+
+Query OK, 0 rows affected (0.005 sec) 
+
+ 
+
+mysql> 
+
+mysql> INSERT INTO SUPPLY VALUES 
+
+    -> (101, 201, 301), 
+
+    -> (101, 201, 302), 
+
+    -> (102, 202, 302), 
+
+    -> (103, 203, 303); 
+
+Query OK, 4 rows affected (0.051 sec) 
+
+Records: 4  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> -- LOAD DATA INTO UNNORMALISED ORDER_LINE TABLE 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> INSERT INTO ORDER_LINE 
+
+    -> SELECT 
+
+    ->     OH.OrderID, 
+
+    ->     OH.OrderDate, 
+
+    ->     C.CustomerID, 
+
+    ->     C.CustomerName, 
+
+    ->     C.CustomerEmail, 
+
+    ->     OH.ShipStreet, 
+
+    ->     PC.ShipCity, 
+
+    ->     OH.ShipPIN, 
+
+    ->     PC.ShipState, 
+
+    ->     P.ProductID, 
+
+    ->     P.ProductName, 
+
+    ->     P.UnitPrice, 
+
+    ->     CAT.CategoryID, 
+
+    ->     CAT.CategoryName, 
+
+    ->     S.SupplierID, 
+
+    ->     S.SupplierName, 
+
+    ->     S.SupplierPhone, 
+
+    ->     OI.Quantity, 
+
+    ->     W.WarehouseID, 
+
+    ->     W.WarehouseCity, 
+
+    ->     ( 
+
+    ->         SELECT GROUP_CONCAT(PT.Tag ORDER BY PT.Tag) 
+
+    ->         FROM ProductTag PT 
+
+    ->         WHERE PT.ProductID = P.ProductID 
+
+    ->     ), 
+
+    ->     ( 
+
+    ->         SELECT GROUP_CONCAT(PCL.Colour ORDER BY PCL.Colour) 
+
+    ->         FROM ProductColour PCL 
+
+    ->         WHERE PCL.ProductID = P.ProductID 
+
+    ->     ) 
+
+    -> FROM OrderHeader OH 
+
+    -> JOIN Customer C 
+
+    ->     ON OH.CustomerID = C.CustomerID 
+
+    -> JOIN PostalCode PC 
+
+    ->     ON OH.ShipPIN = PC.ShipPIN 
+
+    -> JOIN OrderItem OI 
+
+    ->     ON OH.OrderID = OI.OrderID 
+
+    -> JOIN Product P 
+
+    ->     ON OI.ProductID = P.ProductID 
+
+    -> JOIN Category CAT 
+
+    ->     ON P.CategoryID = CAT.CategoryID 
+
+    -> JOIN Supplier S 
+
+    ->     ON P.SupplierID = S.SupplierID 
+
+    -> JOIN Warehouse W 
+
+    ->     ON OI.WarehouseID = W.WarehouseID; 
+
+Query OK, 5 rows affected (0.143 sec) 
+
+Records: 5  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.006 sec) 
+
+ 
+
+mysql> -- TASK 8: IMPLEMENTATION AND TESTING 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> -- DISPLAY UNNORMALISED TABLE 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT * FROM ORDER_LINE; 
+
++---------+------------+------------+--------------+-------------------+--------------+-----------+---------+-------------+-----------+-------------+-----------+------------+--------------+------------+-----------------+---------------+----------+-------------+---------------+---------------------------+--------------+ 
+
+| OrderID | OrderDate  | CustomerID | CustomerName | CustomerEmail     | ShipStreet   | ShipCity  | ShipPIN | ShipState   | ProductID | ProductName | UnitPrice | CategoryID | CategoryName | SupplierID | SupplierName    | SupplierPhone | Quantity | WarehouseID | WarehouseCity | TagList                   | ColourList   | 
+
++---------+------------+------------+--------------+-------------------+--------------+-----------+---------+-------------+-----------+-------------+-----------+------------+--------------+------------+-----------------+---------------+----------+-------------+---------------+---------------------------+--------------+ 
+
+|    1001 | 2026-10-01 |          1 | Arun Kumar   | arun@gmail.com    | Anna Salai   | Chennai   | 600001  | Tamil Nadu  |       501 | Laptop      |  55000.00 |        201 | Electronics  |        101 | ABC Electronics | 9876543210    |        1 |         301 | Chennai       | Computer,Electronics,Work | Black,Silver | 
+
+|    1001 | 2026-10-01 |          1 | Arun Kumar   | arun@gmail.com    | Anna Salai   | Chennai   | 600001  | Tamil Nadu  |       502 | Smartphone  |  25000.00 |        201 | Electronics  |        101 | ABC Electronics | 9876543210    |        2 |         301 | Chennai       | Electronics,Mobile        | Black,Blue   | 
+
+|    1002 | 2026-10-02 |          2 | Rahul Sharma | rahul@gmail.com   | MG Road      | Bangalore | 560001  | Karnataka   |       503 | T Shirt     |    800.00 |        202 | Clothing     |        102 | Smart Products  | 9876543211    |        3 |         302 | Bangalore     | Fashion                   | Red,White    | 
+
+|    1003 | 2026-10-03 |          3 | Priya Kumar  | priya@gmail.com   | Marine Drive | Mumbai    | 400001  | Maharashtra |       504 | Headphones  |   1500.00 |        203 | Accessories  |        103 | Global Traders  | 9876543212    |        1 |         303 | Mumbai        | Audio                     | Black        | 
+
+|    1004 | 2026-10-04 |          4 | Karthik Raj  | karthik@gmail.com | Anna Salai   | Chennai   | 600001  | Tamil Nadu  |       501 | Laptop      |  55000.00 |        201 | Electronics  |        101 | ABC Electronics | 9876543210    |        1 |         301 | Chennai       | Computer,Electronics,Work | Black,Silver | 
+
++---------+------------+------------+--------------+-------------------+--------------+-----------+---------+-------------+-----------+-------------+-----------+------------+--------------+------------+-----------------+---------------+----------+-------------+---------------+---------------------------+--------------+ 
+
+5 rows in set (0.008 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- DISPLAY NORMALISED CUSTOMER DATA 
+
+Query OK, 0 rows affected (0.005 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT * FROM Customer; 
+
++------------+--------------+-------------------+ 
+
+| CustomerID | CustomerName | CustomerEmail     | 
+
++------------+--------------+-------------------+ 
+
+|          1 | Arun Kumar   | arun@gmail.com    | 
+
+|          2 | Rahul Sharma | rahul@gmail.com   | 
+
+|          3 | Priya Kumar  | priya@gmail.com   | 
+
+|          4 | Karthik Raj  | karthik@gmail.com | 
+
++------------+--------------+-------------------+ 
+
+4 rows in set (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- DISPLAY PRODUCT DATA 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT * FROM Product; 
+
++-----------+-------------+-----------+------------+------------+ 
+
+| ProductID | ProductName | UnitPrice | CategoryID | SupplierID | 
+
++-----------+-------------+-----------+------------+------------+ 
+
+|       501 | Laptop      |  55000.00 |        201 |        101 | 
+
+|       502 | Smartphone  |  25000.00 |        201 |        101 | 
+
+|       503 | T Shirt     |    800.00 |        202 |        102 | 
+
+|       504 | Headphones  |   1500.00 |        203 |        103 | 
+
++-----------+-------------+-----------+------------+------------+ 
+
+4 rows in set (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- DISPLAY ORDER DETAILS 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT 
+
+    ->     OH.OrderID, 
+
+    ->     OH.OrderDate, 
+
+    ->     C.CustomerName, 
+
+    ->     P.ProductName, 
+
+    ->     OI.Quantity, 
+
+    ->     OI.UnitPrice, 
+
+    ->     OI.Quantity * OI.UnitPrice AS TotalAmount 
+
+    -> FROM OrderHeader OH 
+
+    -> JOIN Customer C 
+
+    ->     ON OH.CustomerID = C.CustomerID 
+
+    -> JOIN OrderItem OI 
+
+    ->     ON OH.OrderID = OI.OrderID 
+
+    -> JOIN Product P 
+
+    ->     ON OI.ProductID = P.ProductID; 
+
++---------+------------+--------------+-------------+----------+-----------+-------------+ 
+
+| OrderID | OrderDate  | CustomerName | ProductName | Quantity | UnitPrice | TotalAmount | 
+
++---------+------------+--------------+-------------+----------+-----------+-------------+ 
+
+|    1001 | 2026-10-01 | Arun Kumar   | Laptop      |        1 |  53000.00 |    53000.00 | 
+
+|    1001 | 2026-10-01 | Arun Kumar   | Smartphone  |        2 |  24000.00 |    48000.00 | 
+
+|    1002 | 2026-10-02 | Rahul Sharma | T Shirt     |        3 |    800.00 |     2400.00 | 
+
+|    1003 | 2026-10-03 | Priya Kumar  | Headphones  |        1 |   1400.00 |     1400.00 | 
+
+|    1004 | 2026-10-04 | Karthik Raj  | Laptop      |        1 |  55000.00 |    55000.00 | 
+
++---------+------------+--------------+-------------+----------+-----------+-------------+ 
+
+5 rows in set (0.005 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- CHECK FOREIGN KEY AND PRIMARY KEY STRUCTURES 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> SHOW CREATE TABLE OrderItem; 
+
++-----------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+ 
+
+| Table     | Create Table                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | 
+
++-----------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+ 
+
+| OrderItem | CREATE TABLE `orderitem` ( 
+
+  `OrderID` int NOT NULL, 
+
+  `ProductID` int NOT NULL, 
+
+  `Quantity` int NOT NULL, 
+
+  `WarehouseID` int NOT NULL, 
+
+  `UnitPrice` decimal(10,2) NOT NULL, 
+
+  PRIMARY KEY (`OrderID`,`ProductID`), 
+
+  KEY `ProductID` (`ProductID`), 
+
+  KEY `WarehouseID` (`WarehouseID`), 
+
+  CONSTRAINT `orderitem_ibfk_1` FOREIGN KEY (`OrderID`) REFERENCES `orderheader` (`OrderID`), 
+
+  CONSTRAINT `orderitem_ibfk_2` FOREIGN KEY (`ProductID`) REFERENCES `product` (`ProductID`), 
+
+  CONSTRAINT `orderitem_ibfk_3` FOREIGN KEY (`WarehouseID`) REFERENCES `warehouse` (`WarehouseID`), 
+
+  CONSTRAINT `orderitem_chk_1` CHECK ((`Quantity` > 0)), 
+
+  CONSTRAINT `orderitem_chk_2` CHECK ((`UnitPrice` >= 0)) 
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci | 
+
++-----------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+ 
+
+1 row in set (0.031 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- TASK 6: VERIFY 4NF TABLES 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT * FROM ProductTag; 
+
++-----------+-------------+ 
+
+| ProductID | Tag         | 
+
++-----------+-------------+ 
+
+|       501 | Computer    | 
+
+|       501 | Electronics | 
+
+|       501 | Work        | 
+
+|       502 | Electronics | 
+
+|       502 | Mobile      | 
+
+|       503 | Fashion     | 
+
+|       504 | Audio       | 
+
++-----------+-------------+ 
+
+7 rows in set (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT * FROM ProductColour; 
+
++-----------+--------+ 
+
+| ProductID | Colour | 
+
++-----------+--------+ 
+
+|       501 | Black  | 
+
+|       501 | Silver | 
+
+|       502 | Black  | 
+
+|       502 | Blue   | 
+
+|       503 | Red    | 
+
+|       503 | White  | 
+
+|       504 | Black  | 
+
++-----------+--------+ 
+
+7 rows in set (0.002 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- COUNT TAGS FOR EACH PRODUCT 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT 
+
+    ->     ProductID, 
+
+    ->     COUNT(*) AS TotalTags 
+
+    -> FROM ProductTag 
+
+    -> GROUP BY ProductID; 
+
++-----------+-----------+ 
+
+| ProductID | TotalTags | 
+
++-----------+-----------+ 
+
+|       501 |         3 | 
+
+|       502 |         2 | 
+
+|       503 |         1 | 
+
+|       504 |         1 | 
+
++-----------+-----------+ 
+
+4 rows in set (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- COUNT COLOURS FOR EACH PRODUCT 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT 
+
+    ->     ProductID, 
+
+    ->     COUNT(*) AS TotalColours 
+
+    -> FROM ProductColour 
+
+    -> GROUP BY ProductID; 
+
++-----------+--------------+ 
+
+| ProductID | TotalColours | 
+
++-----------+--------------+ 
+
+|       501 |            2 | 
+
+|       502 |            2 | 
+
+|       503 |            2 | 
+
+|       504 |            1 | 
+
++-----------+--------------+ 
+
+4 rows in set (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.001 sec) 
+
+ 
+
+mysql> -- TASK 7: VERIFY 5NF TABLES 
+
+Query OK, 0 rows affected (0.001 sec) 
+
+ 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.001 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT * FROM SupplierCategory; 
+
++------------+------------+ 
+
+| SupplierID | CategoryID | 
+
++------------+------------+ 
+
+|        101 |        201 | 
+
+|        102 |        202 | 
+
+|        103 |        203 | 
+
++------------+------------+ 
+
+3 rows in set (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT * FROM CategoryWarehouse; 
+
++------------+-------------+ 
+
+| CategoryID | WarehouseID | 
+
++------------+-------------+ 
+
+|        201 |         301 | 
+
+|        201 |         302 | 
+
+|        202 |         302 | 
+
+|        203 |         303 | 
+
++------------+-------------+ 
+
+4 rows in set (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT * FROM SupplierWarehouse; 
+
++------------+-------------+ 
+
+| SupplierID | WarehouseID | 
+
++------------+-------------+ 
+
+|        101 |         301 | 
+
+|        101 |         302 | 
+
+|        102 |         302 | 
+
+|        103 |         303 | 
+
++------------+-------------+ 
+
+4 rows in set (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT * FROM SUPPLY; 
+
++------------+------------+-------------+ 
+
+| SupplierID | CategoryID | WarehouseID | 
+
++------------+------------+-------------+ 
+
+|        101 |        201 |         301 | 
+
+|        101 |        201 |         302 | 
+
+|        102 |        202 |         302 | 
+
+|        103 |        203 |         303 | 
+
++------------+------------+-------------+ 
+
+4 rows in set (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- JOIN THE THREE 5NF RELATIONS 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT 
+
+    ->     SC.SupplierID, 
+
+    ->     SC.CategoryID, 
+
+    ->     CW.WarehouseID 
+
+    -> FROM SupplierCategory SC 
+
+    -> JOIN CategoryWarehouse CW 
+
+    ->     ON SC.CategoryID = CW.CategoryID 
+
+    -> JOIN SupplierWarehouse SW 
+
+    ->     ON SC.SupplierID = SW.SupplierID 
+
+    ->     AND CW.WarehouseID = SW.WarehouseID; 
+
++------------+------------+-------------+ 
+
+| SupplierID | CategoryID | WarehouseID | 
+
++------------+------------+-------------+ 
+
+|        101 |        201 |         301 | 
+
+|        101 |        201 |         302 | 
+
+|        102 |        202 |         302 | 
+
+|        103 |        203 |         303 | 
+
++------------+------------+-------------+ 
+
+4 rows in set (0.005 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> -- TASK 9: EXPERIMENTAL EVIDENCE 
+
+Query OK, 0 rows affected (0.001 sec) 
+
+ 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.001 sec) 
+
+ 
+
+mysql> 
+
+mysql> -- COUNT RECORDS IN EACH TABLE 
+
+Query OK, 0 rows affected (0.001 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT 'ORDER_LINE' AS TableName, 
+
+    ->        COUNT(*) AS TotalRows FROM ORDER_LINE 
+
+    -> UNION ALL 
+
+    -> SELECT 'Customer', COUNT(*) FROM Customer 
+
+    -> UNION ALL 
+
+    -> SELECT 'Supplier', COUNT(*) FROM Supplier 
+
+    -> UNION ALL 
+
+    -> SELECT 'Product', COUNT(*) FROM Product 
+
+    -> UNION ALL 
+
+    -> SELECT 'OrderHeader', COUNT(*) FROM OrderHeader 
+
+    -> UNION ALL 
+
+    -> SELECT 'OrderItem', COUNT(*) FROM OrderItem 
+
+    -> UNION ALL 
+
+    -> SELECT 'ProductTag', COUNT(*) FROM ProductTag 
+
+    -> UNION ALL 
+
+    -> SELECT 'ProductColour', COUNT(*) FROM ProductColour; 
+
++---------------+-----------+ 
+
+| TableName     | TotalRows | 
+
++---------------+-----------+ 
+
+| ORDER_LINE    |         5 | 
+
+| Customer      |         4 | 
+
+| Supplier      |         3 | 
+
+| Product       |         4 | 
+
+| OrderHeader   |         4 | 
+
+| OrderItem     |         5 | 
+
+| ProductTag    |         7 | 
+
+| ProductColour |         7 | 
+
++---------------+-----------+ 
+
+8 rows in set (0.141 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- CHECK DATABASE STORAGE SIZE 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT 
+
+    ->     TABLE_NAME, 
+
+    ->     TABLE_ROWS, 
+
+    ->     DATA_LENGTH, 
+
+    ->     INDEX_LENGTH, 
+
+    ->     DATA_LENGTH + INDEX_LENGTH AS TOTAL_STORAGE_BYTES 
+
+    -> FROM INFORMATION_SCHEMA.TABLES 
+
+    -> WHERE TABLE_SCHEMA = 'ShopNestDB'; 
+
++-------------------+------------+-------------+--------------+---------------------+ 
+
+| TABLE_NAME        | TABLE_ROWS | DATA_LENGTH | INDEX_LENGTH | TOTAL_STORAGE_BYTES | 
+
++-------------------+------------+-------------+--------------+---------------------+ 
+
+| category          |          3 |       16384 |        16384 |               32768 | 
+
+| categorywarehouse |          4 |       16384 |        16384 |               32768 | 
+
+| customer          |          4 |       16384 |        16384 |               32768 | 
+
+| order_line        |          5 |       16384 |            0 |               16384 | 
+
+| orderheader       |          4 |       16384 |        32768 |               49152 | 
+
+| orderitem         |          5 |       16384 |        32768 |               49152 | 
+
+| postalcode        |          3 |       16384 |            0 |               16384 | 
+
+| product           |          4 |       16384 |        32768 |               49152 | 
+
+| productcolour     |          7 |       16384 |            0 |               16384 | 
+
+| producttag        |          7 |       16384 |            0 |               16384 | 
+
+| streetpin         |          3 |       16384 |        16384 |               32768 | 
+
+| supplier          |          3 |       16384 |            0 |               16384 | 
+
+| suppliercategory  |          3 |       16384 |        16384 |               32768 | 
+
+| supplierwarehouse |          4 |       16384 |        16384 |               32768 | 
+
+| supply            |          4 |       16384 |        32768 |               49152 | 
+
+| warehouse         |          3 |       16384 |            0 |               16384 | 
+
++-------------------+------------+-------------+--------------+---------------------+ 
+
+16 rows in set (0.342 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- TASK 10: UPDATE PERFORMANCE TEST 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> 
+
+mysql> -- CHECK CURRENT SUPPLIER PHONE 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT * FROM Supplier 
+
+    -> WHERE SupplierID = 101; 
+
++------------+-----------------+---------------+ 
+
+| SupplierID | SupplierName    | SupplierPhone | 
+
++------------+-----------------+---------------+ 
+
+|        101 | ABC Electronics | 9876543210    | 
+
++------------+-----------------+---------------+ 
+
+1 row in set (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- UPDATE SUPPLIER PHONE IN NORMALISED DESIGN 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> 
+
+mysql> UPDATE Supplier 
+
+    -> SET SupplierPhone = '9999999999' 
+
+    -> WHERE SupplierID = 101; 
+
+Query OK, 1 row affected (0.450 sec) 
+
+Rows matched: 1  Changed: 1  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- VERIFY UPDATE 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT * FROM Supplier 
+
+    -> WHERE SupplierID = 101; 
+
++------------+-----------------+---------------+ 
+
+| SupplierID | SupplierName    | SupplierPhone | 
+
++------------+-----------------+---------------+ 
+
+|        101 | ABC Electronics | 9999999999    | 
+
++------------+-----------------+---------------+ 
+
+1 row in set (0.005 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.006 sec) 
+
+ 
+
+mysql> -- TASK 11: FINAL ORDER HISTORY QUERY 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT 
+
+    ->     OH.OrderID, 
+
+    ->     OH.OrderDate, 
+
+    ->     C.CustomerName, 
+
+    ->     C.CustomerEmail, 
+
+    ->     P.ProductName, 
+
+    ->     OI.Quantity, 
+
+    ->     OI.UnitPrice AS PricePaid, 
+
+    ->     OI.Quantity * OI.UnitPrice AS TotalAmount, 
+
+    ->     W.WarehouseCity 
+
+    -> FROM OrderHeader OH 
+
+    -> JOIN Customer C 
+
+    ->     ON OH.CustomerID = C.CustomerID 
+
+    -> JOIN OrderItem OI 
+
+    ->     ON OH.OrderID = OI.OrderID 
+
+    -> JOIN Product P 
+
+    ->     ON OI.ProductID = P.ProductID 
+
+    -> JOIN Warehouse W 
+
+    ->     ON OI.WarehouseID = W.WarehouseID 
+
+    -> ORDER BY OH.OrderDate DESC; 
+
++---------+------------+--------------+-------------------+-------------+----------+-----------+-------------+---------------+ 
+
+| OrderID | OrderDate  | CustomerName | CustomerEmail     | ProductName | Quantity | PricePaid | TotalAmount | WarehouseCity | 
+
++---------+------------+--------------+-------------------+-------------+----------+-----------+-------------+---------------+ 
+
+|    1004 | 2026-10-04 | Karthik Raj  | karthik@gmail.com | Laptop      |        1 |  55000.00 |    55000.00 | Chennai       | 
+
+|    1003 | 2026-10-03 | Priya Kumar  | priya@gmail.com   | Headphones  |        1 |   1400.00 |     1400.00 | Mumbai        | 
+
+|    1002 | 2026-10-02 | Rahul Sharma | rahul@gmail.com   | T Shirt     |        3 |    800.00 |     2400.00 | Bangalore     | 
+
+|    1001 | 2026-10-01 | Arun Kumar   | arun@gmail.com    | Laptop      |        1 |  53000.00 |    53000.00 | Chennai       | 
+
+|    1001 | 2026-10-01 | Arun Kumar   | arun@gmail.com    | Smartphone  |        2 |  24000.00 |    48000.00 | Chennai       | 
+
++---------+------------+--------------+-------------------+-------------+----------+-----------+-------------+---------------+ 
+
+5 rows in set (0.011 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- TASK 12: PRICE CHANGE DESIGN 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> -- PRODUCT TABLE STORES CURRENT PRICE 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> -- ORDER ITEM STORES ACTUAL PRICE PAID 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> 
+
+mysql> -- DISPLAY CURRENT PRICE AND HISTORICAL PRICE PAID 
+
+Query OK, 0 rows affected (0.001 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT 
+
+    ->     P.ProductID, 
+
+    ->     P.ProductName, 
+
+    ->     P.UnitPrice AS CurrentPrice, 
+
+    ->     OI.UnitPrice AS PricePaid, 
+
+    ->     OH.OrderID, 
+
+    ->     OH.OrderDate 
+
+    -> FROM Product P 
+
+    -> JOIN OrderItem OI 
+
+    ->     ON P.ProductID = OI.ProductID 
+
+    -> JOIN OrderHeader OH 
+
+    ->     ON OI.OrderID = OH.OrderID; 
+
++-----------+-------------+--------------+-----------+---------+------------+ 
+
+| ProductID | ProductName | CurrentPrice | PricePaid | OrderID | OrderDate  | 
+
++-----------+-------------+--------------+-----------+---------+------------+ 
+
+|       501 | Laptop      |     55000.00 |  53000.00 |    1001 | 2026-10-01 | 
+
+|       502 | Smartphone  |     25000.00 |  24000.00 |    1001 | 2026-10-01 | 
+
+|       503 | T Shirt     |       800.00 |    800.00 |    1002 | 2026-10-02 | 
+
+|       504 | Headphones  |      1500.00 |   1400.00 |    1003 | 2026-10-03 | 
+
+|       501 | Laptop      |     55000.00 |  55000.00 |    1004 | 2026-10-04 | 
+
++-----------+-------------+--------------+-----------+---------+------------+ 
+
+5 rows in set (0.005 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- UPDATE CURRENT PRODUCT PRICE 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> 
+
+mysql> UPDATE Product 
+
+    -> SET UnitPrice = 58000.00 
+
+    -> WHERE ProductID = 501; 
+
+Query OK, 1 row affected (0.042 sec) 
+
+Rows matched: 1  Changed: 1  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- VERIFY OLD ORDER PRICE IS PRESERVED 
+
+Query OK, 0 rows affected (0.002 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT 
+
+    ->     P.ProductName, 
+
+    ->     P.UnitPrice AS CurrentPrice, 
+
+    ->     OI.UnitPrice AS HistoricalPricePaid, 
+
+    ->     OI.OrderID 
+
+    -> FROM Product P 
+
+    -> JOIN OrderItem OI 
+
+    ->     ON P.ProductID = OI.ProductID 
+
+    -> WHERE P.ProductID = 501; 
+
++-------------+--------------+---------------------+---------+ 
+
+| ProductName | CurrentPrice | HistoricalPricePaid | OrderID | 
+
++-------------+--------------+---------------------+---------+ 
+
+| Laptop      |     58000.00 |            53000.00 |    1001 | 
+
+| Laptop      |     58000.00 |            55000.00 |    1004 | 
+
++-------------+--------------+---------------------+---------+ 
+
+2 rows in set (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.001 sec) 
+
+ 
+
+mysql> -- INDEX FOR ORDER HISTORY QUERIES 
+
+Query OK, 0 rows affected (0.001 sec) 
+
+ 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.001 sec) 
+
+ 
+
+mysql> 
+
+mysql> CREATE INDEX idx_order_date 
+
+    -> ON OrderHeader(OrderDate); 
+
+Query OK, 0 rows affected (0.386 sec) 
+
+Records: 0  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> CREATE INDEX idx_order_customer 
+
+    -> ON OrderHeader(CustomerID); 
+
+Query OK, 0 rows affected (0.536 sec) 
+
+Records: 0  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> CREATE INDEX idx_orderitem_product 
+
+    -> ON OrderItem(ProductID); 
+
+Query OK, 0 rows affected (0.438 sec) 
+
+Records: 0  Duplicates: 0  Warnings: 0 
+
+ 
+
+mysql> 
+
+mysql> 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.004 sec) 
+
+ 
+
+mysql> -- FINAL DATABASE VERIFICATION 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> -- ===================================================== 
+
+Query OK, 0 rows affected (0.003 sec) 
+
+ 
+
+mysql> 
+
+mysql> SHOW TABLES; 
+
++----------------------+ 
+
+| Tables_in_shopnestdb | 
+
++----------------------+ 
+
+| category             | 
+
+| categorywarehouse    | 
+
+| customer             | 
+
+| order_line           | 
+
+| orderheader          | 
+
+| orderitem            | 
+
+| postalcode           | 
+
+| product              | 
+
+| productcolour        | 
+
+| producttag           | 
+
+| streetpin            | 
+
+| supplier             | 
+
+| suppliercategory     | 
+
+| supplierwarehouse    | 
+
+| supply               | 
+
+| warehouse            | 
+
++----------------------+ 
+
+16 rows in set (0.018 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT COUNT(*) AS TotalCustomers FROM Customer; 
+
++----------------+ 
+
+| TotalCustomers | 
+
++----------------+ 
+
+|              4 | 
+
++----------------+ 
+
+1 row in set (0.007 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT COUNT(*) AS TotalProducts FROM Product; 
+
++---------------+ 
+
+| TotalProducts | 
+
++---------------+ 
+
+|             4 | 
+
++---------------+ 
+
+1 row in set (0.006 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT COUNT(*) AS TotalOrders FROM OrderHeader; 
+
++-------------+ 
+
+| TotalOrders | 
+
++-------------+ 
+
+|           4 | 
+
++-------------+ 
+
+1 row in set (0.007 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT COUNT(*) AS TotalOrderItems FROM OrderItem; 
+
++-----------------+ 
+
+| TotalOrderItems | 
+
++-----------------+ 
+
+|               5 | 
+
++-----------------+ 
+
+1 row in set (0.004 sec) 
+
+ 
+
+mysql> 
+
+mysql> SELECT COUNT(*) AS TotalFlatRows FROM ORDER_LINE; 
+
++---------------+ 
+
+| TotalFlatRows | 
+
++---------------+ 
+
+|             5 | 
+
++---------------+ 
+
+1 row in set (0.022 sec) 
+
+ 
+
+mysql> 
+
+mysql> -- END OF CSA05 CO3 ASSIGNMENT 
+
+Query OK, 0 rows affected (0.004 sec) 
