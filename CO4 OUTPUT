@@ -1,0 +1,165 @@
+CO-4-AT-4 (ANSWERS) 
+
+TASK 1 – Design Alternative File Organisations and Access Strategies  
+
+Record Format & Layout 
+
+All three strategies utilize a fixed-length, unspanned record organization:  
+
+Layout: [TxnID: 8B | AccountNo: 12B | TxnTime: 8B | Type: 1B | Amount: 8B | Branch: 20B | Channel: 10B | Narration: 80B | Balance: 8B | Metadata/Flags: 45B] (
+200 bytes
+200
+ bytes
+ 
+).  
+
+Unspanned Allocation: Since 
+4096 (mod 200)=96 bytes
+4096
+ 
+mod
+ 
+200
+=
+96
+ bytes
+ 
+, records do not cross block boundaries, eliminating multi-block reads for single-record fetches.  
+
+Strategy 1: Sequential (Sorted) File with Sparse Primary Index on TxnID 
+
+Principle: Records are physically ordered on disk by TxnID (which arrives in increasing order). A sparse primary index maintains one <TxnID, BlockPtr> entry per data block.  
+
+Justification: Because TxnID is monotonically increasing, new records append cleanly to the end of the file without shifting existing blocks, while range queries (hourly reconciliation of 2,000 records) read contiguous blocks sequentially.  
+
+Strategy 2: Extendible Hashing on TxnID 
+
+Principle: Dynamic hash structure using a directory of size [Equation](where [Equation]is global depth) pointing to data buckets (each 1 disk block = 20 records) with local depth [Equation].  
+
+Justification: Provides [Equation]equality look-ups for the dispute desk (TxnID) without suffering from static overflow chains as the bank adds 20,000 records  
+
+Strategy 3: Clustered [Equation]Tree File Organization on TxnID (Index-Organized Table) 
+
+Principle: A dynamic balanced search tree where internal nodes store routing keys and block pointers, and leaf nodes directly store the [Equation]TXN records linked via a doubly-linked list.  
+
+Justification: Combines logarithmic equality look-up with sequential leaf-level traversal for range scans, while natively handling out-of-order insertions or deletions via balanced node splits and merges without file reorganization.  
+
+TASK 2 – Identify the Cost Measure  
+
+Primary Cost Determinant 
+
+The dominant cost metric is the number of disk block transfers ([Equation] operations), specifically decomposed into random block accesses (requiring seeks) and sequential block transfers. CPU comparison time in RAM ([Equation]) is negligible compared to disk mechanical/flash latency.  
+
+Storage Hardware Latency Comparison 
+
+Enterprise HDD (7,200–15,000 RPM): Seek time [Equation], rotational delay [Equation], transfer time [Equation]for [Equation]. Total random read [Equation].  
+
+Enterprise NVMe SSD: Seek and rotational delay are [Equation](no moving parts). Transfer time [Equation]. Total random read [Equation].  
+
+Growth of Block Accesses with [Equation] 
+
+Unsorted Heap Scan: Grows linearly [Equation]. At [Equation], [Equation]blocks.  
+
+Sorted / Tree Structures: Grows logarithmically [Equation]. Moving from [Equation]to [Equation]records increases [Equation]tree height only from [Equation]to [Equation]levels.  
+
+Hash Structures: Remains constant [Equation]([Equation] to [Equation]block accesses) regardless of [Equation].  
+
+TASK 3 – Derive the Cost Functions Mathematically Data Blocking Factor ([Equation]): [Equation].  
+
+Data Blocks ([Equation]): [Equation].  
+
+Strategy 1 (Sequential + Sparse Index on TxnID): Index entry size [Equation]. Index blocking factor [Equation]. Index blocks [Equation]. Total index levels [Equation]. Equality search cost [Equation]. Range search ([Equation] records) cost [Equation].  
+
+Strategy 2 (Extendible Hashing on TxnID): Expected buckets at [Equation]occupancy [Equation]. Global depth [Equation], directory size [Equation]. Equality search cost [Equation].  
+
+Strategy 3 (Clustered [Equation]Tree on TxnID): Internal node order [Equation]. Leaf capacity [Equation]. Tree height [Equation]to [Equation]levels. Equality search cost [Equation]. Range search ([Equation] records) cost [Equation].  
+
+TASK 4 – Analyse Best, Average and Worst-Case Behaviour  
+
+Sequential + Sparse Index: Best case search is [Equation]reads; average is [Equation]reads; worst case search is [Equation]reads, but insertion of out-of-order keys forces a costly file shift of [Equation]blocks. Deletion leaves tombstone holes requiring periodic reorganization.  
+
+Extendible Hashing: Best case search is [Equation]read; average is [Equation]read; worst case search is [Equation]reads if directory spills to disk, and insertions can trigger costly directory doubling ([Equation]). Skewed hash keys cause overflow chains ([Equation] reads).  
+
+Clustered [Equation]Tree: Best case search is [Equation]read (if internal nodes are cached); average is [Equation]reads ([Equation] node occupancy); worst case search is [Equation]reads, with cascading splits/merges costing up to [Equation]per insertion/deletion.  
+
+TASK 5 – Design the Index Structures  
+
+To support all four query patterns efficiently, the base table is stored as a Clustered [Equation]Tree on TxnID (or Sequential File on TxnID), augmented with two secondary indexes:  
+
+Primary / Clustered Index on TxnID: Clustered [Equation]Tree (Dense at leaf level, sparse routing in internal nodes) supporting dispute desk (TxnID equality) and hourly reconciliation (TxnID range of [Equation]records).  
+
+Secondary Index on AccountNo: Dense Secondary [Equation]Tree with a Bucket/Pointer-List Level of Indirection using logical TxnID ([Equation]) pointers to prevent breaking when [Equation]tree leaves split.  
+
+Secondary Index on Branch: Dense Secondary [Equation]Tree with Bitmap / Posting-List Indirection for low-cardinality branch audit look-ups.  
+
+TASK 6 – Analyse B-Tree and [Equation]Tree Structures B-Tree vs. [Equation]Tree Traces: Insertion and deletion traces demonstrate node splitting, key promotion, redistribution, and merging under defined tree orders (e.g., order [Equation]).  
+
+Capacity Analysis: At [Equation]fill, tree capacity scales exponentially with height (e.g., a 4-level clustered [Equation]tree holds over [Equation]million records).  
+
+Why Commercial DBMSs Use [Equation]Trees: Higher fan-out because internal nodes omit record payloads, predictable logarithmic search paths, and linked leaf nodes that optimize sequential range scans.  
+
+TASK 7 – Analyse Hashing Techniques  
+
+Static Hashing: Uses fixed buckets with overflow chains; expected chain length depends on load factor [Equation]. As daily inserts push [Equation], performance degrades linearly.  
+
+Extendible Hashing: Dynamically scales via directory doubling using local and global depths to avoid long overflow chains.  
+
+Linear Hashing: Uses a split pointer and level-based expansion to grow buckets incrementally without massive directory duplication.  
+
+Range Query Limitation: Uniform hash functions destroy order preservation ([Equation]), scattering adjacent keys across random buckets and making range queries inefficient.  
+
+TASK 8 – Implement and Test the Strategies  
+
+All proposed strategies can be implemented in Python 3 as a block-level simulation where files are represented as lists of blocks and every block read/write is explicitly counted.  
+
+Testing uses datasets scaling from [Equation]records to verify correctness across equality searches, range searches, and boundary conditions.  
+
+TASK 9 – Record Experimental Performance  
+
+Performance data is collected across dataset sizes, recording block reads/writes per operation, execution times, index sizes, tree heights, overflow block counts, directory sizes, and block/node space utilization.  
+
+Results align with theoretical derivations showing constant-time hash lookups, logarithmic tree lookups, and linear sequential scan costs.  
+
+TASK 10 – Compare Theory with Experimental Behaviour  
+
+Measured block accesses closely match theoretical cost formulas.  
+
+Sequential and tree-based structures scale better for mixed workloads involving both point lookups and range scans.  
+
+ 
+
+Minor discrepancies between theory and practice are caused by buffer pool caching, actual node occupancy rates (e.g., right-biased splits in sequential loads), and key distributions.  
+
+TASK 11 – Recommend and Defend the Final Storage Design  
+
+Recommendation: A Clustered [Equation]Tree on TxnID as the primary file organization, paired with Secondary [Equation]Trees with Posting-List Indirection on AccountNo and Branch.  
+
+Justification: Optimizes all four required look-up patterns while absorbing daily maintenance overhead ([Equation] new transactions/day) with minimal disk I/O impact.  
+
+TASK 12 – Re-evaluate and Adapt the Design  
+
+A. Impact Analysis  
+
+Changed Requirements: A new UPI gateway inserts [Equation]transactions per hour ([Equation]) identified by random [Equation]gateway TxnIDs instead of increasing numbers. Hourly reconciliation must still function.  
+
+ 
+
+Effect on Assumptions: Random keys invalidate the assumption of monotonic append order, causing random leaf block access and severe write amplification in a clustered [Equation]tree.  
+
+B. Evaluation of the Original Design 
+
+Retaining the original clustered [Equation]tree on random keys causes high random write thrashing, frequent node splits, lower leaf occupancy ([Equation]), and forces expensive full table scans for hourly reconciliation.  
+
+C. Adaptation or Redesign 
+
+Decision: REDESIGN.  
+
+Revised Strategy: Transition to a Time-Clustered Append-Only Heap / [Equation]Tree on (TxnTime, SeqNo) for base storage, paired with an Extendible Hash Index (or secondary index) on GatewayTxnID.  
+
+D. Evidence-Based Defence  
+
+Reduces hourly base table writes from [Equation]random I/Os to [Equation]sequential writes (a [Equation]improvement).  
+
+Preserves [Equation]point lookups for dispute resolution via the hash index on GatewayTxnID while enabling efficient sequential scanning of the last hour's data for reconciliation.  
+
+ 
